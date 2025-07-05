@@ -4,11 +4,12 @@ A simple, responsive, and progressive web application (PWA) for tracking persona
 
 ## Features
 
-*   **Transaction Management:** Add, view, and categorize income and expense transactions.
-*   **Category Management:** Create, edit, and delete custom categories for transactions.
+*   **Transaction Management:** Add, view, and categorize income and expense transactions. Transactions can be filtered by date range, month, and year.
+*   **Category Management:** Create, edit, and delete custom categories for transactions. Edit and delete actions are represented by intuitive icons.
 *   **Data Persistence:** All transaction, category, and user settings are automatically saved locally in the browser's `localStorage`.
 *   **Data Import/Export:** Ability to export all application data (transactions, categories, and settings) to a JSON file and import it back.
-*   **Filtering:** Filter transactions by date range, month, and year.
+*   **Data Deletion:** A "Delete All Data" option in settings allows users to clear all their data with a confirmation step.
+*   **Interactive Charts:** Visualize financial data with yearly and monthly income/expense line charts, and a category-wise spending bar chart on the homepage.
 *   **Responsive Design:** Optimized for various screen sizes, including mobile (with a hamburger menu).
 *   **Internationalization (i18n):** Supports multiple languages (English, Bangla, Dutch, Spanish, Portuguese, Arabic) for a localized user experience.
 *   **PWA Capabilities:** Configured for offline access and installability on supported devices.
@@ -23,6 +24,10 @@ A simple, responsive, and progressive web application (PWA) for tracking persona
 *   **Unique IDs:** [uuid](https://www.npmjs.com/package/uuid)
 *   **Linting:** ESLint
 *   **Type Checking:** TypeScript
+
+## Language Support
+
+The application supports English, Bangla, Dutch, Spanish, Portuguese, and Arabic. These languages can be selected from the settings page.
 
 ## Getting Started
 
@@ -75,8 +80,14 @@ npm run start
 ```
 expense-tracker/
 ├── app/
-│   ├── categories/             # Category management page
-│   │   └── page.tsx
+│   ├── (website)/              # Grouping for website-related pages
+│   │   ├── categories/         # Category management page
+│   │   │   └── page.tsx
+│   │   ├── settings/           # Application settings page
+│   │   │   └── page.tsx
+│   │   ├── transactions/       # Transaction management page
+│   │   │   └── page.tsx
+│   │   └── page.tsx            # Home page
 │   ├── components/             # Reusable UI components (e.g., AppLayout)
 │   │   └── AppLayout.tsx
 │   ├── hooks/                  # Custom React hooks (e.g., useTranslation)
@@ -88,16 +99,13 @@ expense-tracker/
 │   │   ├── es.json
 │   │   ├── nl.json
 │   │   └── pt.json
-│   ├── settings/               # Application settings page
-│   │   └── page.tsx
 │   ├── store/                  # Zustand store for global state management
 │   │   └── useStore.ts
 │   ├── types/                  # TypeScript type definitions
 │   │   └── index.ts
 │   ├── favicon.ico
 │   ├── globals.css             # Global CSS styles
-│   ├── layout.tsx              # Root layout component (Next.js App Router)
-│   └── page.tsx                # Home page (transaction management)
+│   └── layout.tsx              # Root layout component (Next.js App Router)
 ├── public/                     # Static assets (images, manifest.json, sw.js)
 ├── .gitignore
 ├── eslint.config.mjs

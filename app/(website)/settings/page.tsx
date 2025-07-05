@@ -110,7 +110,7 @@ export default function SettingsPage() {
 
   return (
     <>
-    <Box sx={{ p: 4, maxWidth: 600, mx: 'auto' }}>
+    <Box sx={{ pt: 1 }}>
       <Typography variant="h4" component="h1" gutterBottom>
         {t.settings}
       </Typography>

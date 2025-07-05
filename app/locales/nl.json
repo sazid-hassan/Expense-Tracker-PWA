@@ -51,5 +51,10 @@
   "are_you_sure_delete_category": "Weet u zeker dat u deze categorie wilt verwijderen?",
   "please_select_category_for_transaction": "Selecteer een categorie voor de transactie.",
   "data_imported_successfully": "Gegevens succesvol geïmporteerd!",
-  "failed_to_import_data": "Importeren van gegevens mislukt. Zorg ervoor dat het bestand een geldige JSON is."
+  "failed_to_import_data": "Importeren van gegevens mislukt. Zorg ervoor dat het bestand een geldige JSON is.",
+  "category_added_successfully": "Categorie succesvol toegevoegd!",
+  "category_updated_successfully": "Categorie succesvol bijgewerkt!",
+  "category_deleted_successfully": "Categorie succesvol verwijderd!",
+  "transaction_added_successfully": "Transactie succesvol toegevoegd!",
+  "settings_saved_successfully": "Instellingen succesvol opgeslagen!"
 }

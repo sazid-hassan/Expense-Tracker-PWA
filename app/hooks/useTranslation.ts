@@ -25,10 +25,15 @@ const loadTranslations = async (lang: Language) => {
 export const useTranslation = () => {
   const { settings } = useStore();
   const [t, setT] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadTranslations(settings.language).then(setT);
+    setLoading(true);
+    loadTranslations(settings.language).then(translations => {
+      setT(translations);
+      setLoading(false);
+    });
   }, [settings.language]);
 
-  return { t };
+  return { t, loading };
 };

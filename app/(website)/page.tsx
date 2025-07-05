@@ -1,10 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { useStore } from './store/useStore';
-import { Transaction, TransactionType } from './types';
+import { useStore } from '../store/useStore';
+import { Transaction, TransactionType } from '../types';
 import { v4 as uuidv4 } from 'uuid';
-import {
+
+  import {
   Table,
   TableBody,
   TableCell,
@@ -27,7 +28,10 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { useTranslation } from './hooks/useTranslation';
+
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+import { useTranslation } from '../hooks/useTranslation';
 
 export default function HomePage() {
   const { transactions, addTransaction, categories, settings } = useStore();
@@ -37,9 +41,28 @@ export default function HomePage() {
   const [filterMonth, setFilterMonth] = useState<string>('');
   const [filterYear, setFilterYear] = useState<string>('');
 
+  const getCurrencySymbol = (currencyString: string) => {
+    const parts = currencyString.split(' ');
+    return parts[parts.length - 1];
+  };
+
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const { t } = useTranslation();
+  const { t, loading } = useTranslation();
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error' | 'info' | 'warning'>('success');
+
+  const showSnackbar = (message: string, severity: 'success' | 'error' | 'info' | 'warning') => {
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setSnackbarOpen(true);
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -83,8 +106,9 @@ export default function HomePage() {
     if (newTransaction && newTransaction.category) {
       addTransaction({ ...newTransaction, id: uuidv4() });
       setNewTransaction(null);
+      showSnackbar(t.transaction_added_successfully, 'success');
     } else {
-      alert(t.please_select_category_for_transaction);
+      showSnackbar(t.please_select_category_for_transaction, 'error');
     }
   };
 
@@ -137,7 +161,12 @@ export default function HomePage() {
     { value: '12', label: 'December' },
   ];
 
+  if (loading) {
+    return <Typography>Loading translations...</Typography>;
+  }
+
   return (
+    <>
     <Box sx={{ p: 4 }}>
       <Typography variant="h4" component="h1" gutterBottom>
         {t.expense_tracker}
@@ -270,7 +299,7 @@ export default function HomePage() {
                   </TableCell>
                   <TableCell>{transaction.category.name}</TableCell>
                   <TableCell align="right" sx={{ color: transaction.type === 'income' ? 'green' : 'red' }}>
-                    {transaction.type === 'income' ? '+' : '-'} {settings.currency} {transaction.amount.toFixed(2)}
+                    {transaction.type === 'income' ? '+' : '-'} {getCurrencySymbol(settings.currency)} {transaction.amount.toFixed(2)}
                   </TableCell>
                   <TableCell sx={{ textTransform: 'capitalize' }}>{transaction.type}</TableCell>
                 </TableRow>
@@ -338,5 +367,11 @@ export default function HomePage() {
         </Box>
       </Paper>
     </Box>
+    <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
+      <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
+        {snackbarMessage}
+      </Alert>
+    </Snackbar>
+    </>
   );
 }

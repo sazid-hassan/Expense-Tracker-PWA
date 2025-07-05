@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { useStore } from '../store/useStore';
-import { Category, TransactionType } from '../types';
+import { useStore } from '../../store/useStore';
+import { Category, TransactionType } from '../../types';
 import { v4 as uuidv4 } from 'uuid';
 import {
   TextField,
@@ -20,14 +20,31 @@ import {
   SelectChangeEvent,
   IconButton,
 } from '@mui/material';
-import { useTranslation } from '../hooks/useTranslation';
+
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+import { useTranslation } from '../../hooks/useTranslation';
 
 
 export default function CategoriesPage() {
   const { categories, addCategory, updateCategory, deleteCategory } = useStore();
   const [newCategory, setNewCategory] = useState<Omit<Category, 'id'> | null>(null);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
-  const { t } = useTranslation();
+  const { t, loading } = useTranslation();
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error' | 'info' | 'warning'>('success');
+
+  const showSnackbar = (message: string, severity: 'success' | 'error' | 'info' | 'warning') => {
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setSnackbarOpen(true);
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -71,8 +88,9 @@ export default function CategoriesPage() {
     if (newCategory && newCategory.name && newCategory.description) {
       addCategory({ ...newCategory, id: uuidv4() });
       setNewCategory(null);
+      showSnackbar(t.category_added_successfully, 'success');
     } else {
-      alert(t.please_fill_all_fields_for_new_category);
+      showSnackbar(t.please_fill_all_fields_for_new_category, 'error');
     }
   };
 
@@ -80,14 +98,16 @@ export default function CategoriesPage() {
     if (editingCategory && editingCategory.name && editingCategory.description) {
       updateCategory(editingCategory);
       setEditingCategory(null);
+      showSnackbar(t.category_updated_successfully, 'success');
     } else {
-      alert(t.please_fill_all_fields_for_category);
+      showSnackbar(t.please_fill_all_fields_for_category, 'error');
     }
   };
 
   const handleDeleteCategory = (id: string) => {
     if (window.confirm(t.are_you_sure_delete_category)) {
       deleteCategory(id);
+      showSnackbar(t.category_deleted_successfully, 'success');
     }
   };
 
@@ -100,7 +120,12 @@ export default function CategoriesPage() {
     setEditingCategory(null);
   };
 
+  if (loading) {
+    return <Typography>Loading translations...</Typography>;
+  }
+
   return (
+    <>
     <Box sx={{ p: 4 }}>
       <Typography variant="h4" component="h1" gutterBottom>
         {t.categories}
@@ -198,5 +223,11 @@ export default function CategoriesPage() {
         </Box>
       </Paper>
     </Box>
+    <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
+      <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
+        {snackbarMessage}
+      </Alert>
+    </Snackbar>
+    </>
   );
 }

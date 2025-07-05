@@ -51,5 +51,10 @@
   "are_you_sure_delete_category": "Are you sure you want to delete this category?",
   "please_select_category_for_transaction": "Please select a category for the transaction.",
   "data_imported_successfully": "Data imported successfully!",
-  "failed_to_import_data": "Failed to import data. Please ensure the file is a valid JSON."
+  "failed_to_import_data": "Failed to import data. Please ensure the file is a valid JSON.",
+  "category_added_successfully": "Category added successfully!",
+  "category_updated_successfully": "Category updated successfully!",
+  "category_deleted_successfully": "Category deleted successfully!",
+  "transaction_added_successfully": "Transaction added successfully!",
+  "settings_saved_successfully": "Settings saved successfully!"
 }

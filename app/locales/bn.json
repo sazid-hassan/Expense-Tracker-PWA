@@ -51,5 +51,10 @@
   "are_you_sure_delete_category": "আপনি কি নিশ্চিত যে আপনি এই ক্যাটাগরি মুছে ফেলতে চান?",
   "please_select_category_for_transaction": "লেনদেনের জন্য একটি ক্যাটাগরি নির্বাচন করুন।",
   "data_imported_successfully": "ডেটা সফলভাবে ইম্পোর্ট করা হয়েছে!",
-  "failed_to_import_data": "ডেটা ইম্পোর্ট ব্যর্থ হয়েছে। ফাইলটি একটি বৈধ JSON কিনা নিশ্চিত করুন।"
+  "failed_to_import_data": "ডেটা ইম্পোর্ট ব্যর্থ হয়েছে। ফাইলটি একটি বৈধ JSON কিনা নিশ্চিত করুন।",
+  "category_added_successfully": "ক্যাটাগরি সফলভাবে যোগ করা হয়েছে!",
+  "category_updated_successfully": "ক্যাটাগরি সফলভাবে আপডেট করা হয়েছে!",
+  "category_deleted_successfully": "ক্যাটাগরি সফলভাবে মুছে ফেলা হয়েছে!",
+  "transaction_added_successfully": "লেনদেন সফলভাবে যোগ করা হয়েছে!",
+  "settings_saved_successfully": "সেটিংস সফলভাবে সংরক্ষণ করা হয়েছে!"
 }

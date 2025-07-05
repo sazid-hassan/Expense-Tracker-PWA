@@ -2,10 +2,24 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useStore } from '../store/useStore';
-import { AppSettings, Currency, Language } from '../types';
-import { TextField, Button, MenuItem, Select, InputLabel, FormControl, Typography, Box, Paper, SelectChangeEvent } from '@mui/material';
-import { useTranslation } from '../hooks/useTranslation';
+import { useStore } from '../../store/useStore';
+import { AppSettings, Currency, Language } from '../../types';
+  import {
+  TextField,
+  Button,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
+  Typography,
+  Box,
+  Paper,
+  SelectChangeEvent,
+} from '@mui/material';
+
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+import { useTranslation } from '../../hooks/useTranslation';
 
 export default function SettingsPage() {
   const { settings, updateSettings, transactions, categories, importData } = useStore();
@@ -20,6 +34,20 @@ export default function SettingsPage() {
 
   const { t } = useTranslation();
 
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error' | 'info' | 'warning'>('success');
+
+  const showSnackbar = (message: string, severity: 'success' | 'error' | 'info' | 'warning') => {
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setSnackbarOpen(true);
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setCurrentSettings(prev => ({...prev, [name]: value}));
@@ -32,6 +60,7 @@ export default function SettingsPage() {
 
   const handleSave = () => {
     updateSettings(currentSettings);
+    showSnackbar(t.settings_saved_successfully, 'success');
   };
 
   const handleExport = () => {
@@ -53,9 +82,9 @@ export default function SettingsPage() {
         try {
           const data = JSON.parse(event.target?.result as string);
           importData(data);
-          alert(t.data_imported_successfully);
+          showSnackbar(t.data_imported_successfully, 'success');
         } catch (error) {
-          alert(t.failed_to_import_data);
+          showSnackbar(t.failed_to_import_data, 'error');
           console.error('Failed to import data:', error);
         }
       };
@@ -64,6 +93,7 @@ export default function SettingsPage() {
   };
 
   return (
+    <>
     <Box sx={{ p: 4, maxWidth: 600, mx: 'auto' }}>
       <Typography variant="h4" component="h1" gutterBottom>
         {t.settings}
@@ -148,5 +178,11 @@ export default function SettingsPage() {
         </Box>
       </Paper>
     </Box>
+    <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
+      <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
+        {snackbarMessage}
+      </Alert>
+    </Snackbar>
+    </>
   );
 }

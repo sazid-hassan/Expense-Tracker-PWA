@@ -51,5 +51,10 @@
   "are_you_sure_delete_category": "هل أنت متأكد أنك تريد حذف هذه الفئة؟",
   "please_select_category_for_transaction": "يرجى تحديد فئة للمعاملة.",
   "data_imported_successfully": "تم استيراد البيانات بنجاح!",
-  "failed_to_import_data": "فشل استيراد البيانات. يرجى التأكد من أن الملف بتنسيق JSON صالح."
+  "failed_to_import_data": "فشل استيراد البيانات. يرجى التأكد من أن الملف بتنسيق JSON صالح.",
+  "category_added_successfully": "تمت إضافة الفئة بنجاح!",
+  "category_updated_successfully": "تم تحديث الفئة بنجاح!",
+  "category_deleted_successfully": "تم حذف الفئة بنجاح!",
+  "transaction_added_successfully": "تمت إضافة المعاملة بنجاح!",
+  "settings_saved_successfully": "تم حفظ الإعدادات بنجاح!"
 }

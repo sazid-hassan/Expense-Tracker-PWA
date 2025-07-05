@@ -56,6 +56,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               >
                 <MenuItem onClick={handleClose} component={Link} href="/">{t.home}</MenuItem>
                 <MenuItem onClick={handleClose} component={Link} href="/categories">{t.categories}</MenuItem>
+                <MenuItem onClick={handleClose} component={Link} href="/transactions">{t.transactions}</MenuItem>
                 <MenuItem onClick={handleClose} component={Link} href="/settings">{t.settings}</MenuItem>
               </Menu>
             </Box>
@@ -63,6 +64,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <Box>
               <Button color="inherit" component={Link} href="/">{t.home}</Button>
               <Button color="inherit" component={Link} href="/categories">{t.categories}</Button>
+              <Button color="inherit" component={Link} href="/transactions">{t.transactions}</Button>
               <Button color="inherit" component={Link} href="/settings">{t.settings}</Button>
             </Box>
           )}

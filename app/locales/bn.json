@@ -8,6 +8,8 @@
   "add_new_transaction": "নতুন লেনদেন যোগ করুন",
   "filter_transactions": "লেনদেন ফিল্টার করুন",
   "clear_filters": "ফিল্টার মুছুন",
+  "apply_filters": "ফিল্টার প্রয়োগ করুন",
+  "transactions": "লেনদেনসমূহ",
   "user_name": "ব্যবহারকারীর নাম",
   "currency": "মুদ্রা",
   "language": "ভাষা",
@@ -56,5 +58,11 @@
   "category_updated_successfully": "ক্যাটাগরি সফলভাবে আপডেট করা হয়েছে!",
   "category_deleted_successfully": "ক্যাটাগরি সফলভাবে মুছে ফেলা হয়েছে!",
   "transaction_added_successfully": "লেনদেন সফলভাবে যোগ করা হয়েছে!",
-  "settings_saved_successfully": "সেটিংস সফলভাবে সংরক্ষণ করা হয়েছে!"
+  "settings_saved_successfully": "সেটিংস সফলভাবে সংরক্ষণ করা হয়েছে!",
+  "delete_all_data": "সমস্ত ডেটা মুছুন",
+  "confirm_delete_all_data": "ডেটা মোছা নিশ্চিত করুন",
+  "delete_all_data_message": "এই ক্রিয়াটি আপনার সমস্ত লেনদেন, বিভাগ এবং সেটিংস স্থায়ীভাবে মুছে ফেলবে। এটি পূর্বাবস্থায় ফেরানো যাবে না।",
+  "i_understand_and_wish_to_continue": "আমি বুঝি এবং চালিয়ে যেতে চাই",
+  "all_data_deleted_successfully": "সমস্ত ডেটা সফলভাবে মুছে ফেলা হয়েছে!",
+  "please_confirm_data_deletion": "অনুগ্রহ করে বক্সটি চেক করে ডেটা মোছা নিশ্চিত করুন।"
 }

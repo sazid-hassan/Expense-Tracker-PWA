@@ -28,11 +28,13 @@ export const useTranslation = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
-    loadTranslations(settings.language).then(translations => {
-      setT(translations);
-      setLoading(false);
-    });
+    if (settings.language) {
+      setLoading(true);
+      loadTranslations(settings.language).then(translations => {
+        setT(translations);
+        setLoading(false);
+      });
+    }
   }, [settings.language]);
 
   return { t, loading };

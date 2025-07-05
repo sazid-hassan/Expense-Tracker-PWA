@@ -8,6 +8,8 @@
   "add_new_transaction": "Nieuwe Transactie Toevoegen",
   "filter_transactions": "Transacties Filteren",
   "clear_filters": "Filters Wissen",
+  "apply_filters": "Filters Toepassen",
+  "transactions": "Transacties",
   "user_name": "Gebruikersnaam",
   "currency": "Valuta",
   "language": "Taal",
@@ -56,5 +58,11 @@
   "category_updated_successfully": "Categorie succesvol bijgewerkt!",
   "category_deleted_successfully": "Categorie succesvol verwijderd!",
   "transaction_added_successfully": "Transactie succesvol toegevoegd!",
-  "settings_saved_successfully": "Instellingen succesvol opgeslagen!"
+  "settings_saved_successfully": "Instellingen succesvol opgeslagen!",
+  "delete_all_data": "Alle gegevens verwijderen",
+  "confirm_delete_all_data": "Gegevensverwijdering bevestigen",
+  "delete_all_data_message": "Deze actie zal al uw transacties, categorieën en instellingen permanent verwijderen. Dit kan niet ongedaan worden gemaakt.",
+  "i_understand_and_wish_to_continue": "Ik begrijp het en wil doorgaan",
+  "all_data_deleted_successfully": "Alle gegevens succesvol verwijderd!",
+  "please_confirm_data_deletion": "Bevestig gegevensverwijdering door het vakje aan te vinken."
 }

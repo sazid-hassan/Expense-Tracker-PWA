@@ -8,6 +8,8 @@
   "add_new_transaction": "Agregar Nueva Transacción",
   "filter_transactions": "Filtrar Transacciones",
   "clear_filters": "Borrar Filtros",
+  "apply_filters": "Aplicar Filtros",
+  "transactions": "Transacciones",
   "user_name": "Nombre de Usuario",
   "currency": "Moneda",
   "language": "Idioma",
@@ -56,5 +58,11 @@
   "category_updated_successfully": "¡Categoría actualizada exitosamente!",
   "category_deleted_successfully": "¡Categoría eliminada exitosamente!",
   "transaction_added_successfully": "¡Transacción agregada exitosamente!",
-  "settings_saved_successfully": "¡Configuración guardada exitosamente!"
+  "settings_saved_successfully": "¡Configuración guardada exitosamente!",
+  "delete_all_data": "Eliminar Todos los Datos",
+  "confirm_delete_all_data": "Confirmar Eliminación de Datos",
+  "delete_all_data_message": "Esta acción eliminará permanentemente todas sus transacciones, categorías y configuraciones. Esto no se puede deshacer.",
+  "i_understand_and_wish_to_continue": "Entiendo y deseo continuar",
+  "all_data_deleted_successfully": "¡Todos los datos eliminados exitosamente!",
+  "please_confirm_data_deletion": "Por favor, confirme la eliminación de datos marcando la casilla."
 }

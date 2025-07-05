@@ -15,6 +15,9 @@ import { AppSettings, Currency, Language } from '../../types';
   Box,
   Paper,
   SelectChangeEvent,
+  Modal,
+  Checkbox,
+  FormControlLabel,
 } from '@mui/material';
 
 import Snackbar from '@mui/material/Snackbar';
@@ -22,11 +25,13 @@ import Alert from '@mui/material/Alert';
 import { useTranslation } from '../../hooks/useTranslation';
 
 export default function SettingsPage() {
-  const { settings, updateSettings, transactions, categories, importData } = useStore();
+  const { settings, updateSettings, transactions, categories, importData, clearAllData } = useStore();
   const [currentSettings, setCurrentSettings] = useState<AppSettings>({
     ...settings,
     language: settings.language || Language.EN, // Ensure language is always defined
   });
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteConfirmationChecked, setDeleteConfirmationChecked] = useState(false);
 
   useEffect(() => {
     setCurrentSettings(settings);
@@ -46,6 +51,17 @@ export default function SettingsPage() {
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
+  };
+
+  const handleDeleteAllData = () => {
+    if (deleteConfirmationChecked) {
+      clearAllData();
+      showSnackbar(t.all_data_deleted_successfully, 'success');
+      setIsDeleteModalOpen(false);
+      setDeleteConfirmationChecked(false);
+    } else {
+      showSnackbar(t.please_confirm_data_deletion, 'error');
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -176,7 +192,55 @@ export default function SettingsPage() {
             </Button>
           </label>
         </Box>
+        <Button variant="contained" color="error" onClick={() => setIsDeleteModalOpen(true)}>
+          {t.delete_all_data}
+        </Button>
       </Paper>
+
+      <Modal
+        open={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        aria-labelledby="delete-all-data-modal-title"
+        aria-describedby="delete-all-data-modal-description"
+      >
+        <Box sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: 400,
+          bgcolor: 'background.paper',
+          border: '2px solid #000',
+          boxShadow: 24,
+          p: 4,
+        }}>
+          <Typography id="delete-all-data-modal-title" variant="h6" component="h2" gutterBottom>
+            {t.confirm_delete_all_data}
+          </Typography>
+          <Typography id="delete-all-data-modal-description" sx={{ mt: 2, mb: 2 }}>
+            {t.delete_all_data_message}
+          </Typography>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={deleteConfirmationChecked}
+                onChange={(e) => setDeleteConfirmationChecked(e.target.checked)}
+                name="deleteConfirmation"
+                color="primary"
+              />
+            }
+            label={t.i_understand_and_wish_to_continue}
+          />
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 2 }}>
+            <Button variant="outlined" onClick={() => setIsDeleteModalOpen(false)}>
+              {t.cancel}
+            </Button>
+            <Button variant="contained" color="error" onClick={handleDeleteAllData}>
+              {t.delete_all_data}
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
     </Box>
     <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
       <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>

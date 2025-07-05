@@ -8,6 +8,8 @@
   "add_new_transaction": "Add New Transaction",
   "filter_transactions": "Filter Transactions",
   "clear_filters": "Clear Filters",
+  "apply_filters": "Apply Filters",
+  "transactions": "Transactions",
   "user_name": "User Name",
   "currency": "Currency",
   "language": "Language",
@@ -56,5 +58,11 @@
   "category_updated_successfully": "Category updated successfully!",
   "category_deleted_successfully": "Category deleted successfully!",
   "transaction_added_successfully": "Transaction added successfully!",
-  "settings_saved_successfully": "Settings saved successfully!"
+  "settings_saved_successfully": "Settings saved successfully!",
+  "delete_all_data": "Delete All Data",
+  "confirm_delete_all_data": "Confirm Data Deletion",
+  "delete_all_data_message": "This action will permanently delete all your transactions, categories, and settings. This cannot be undone.",
+  "i_understand_and_wish_to_continue": "I understand and wish to continue",
+  "all_data_deleted_successfully": "All data deleted successfully!",
+  "please_confirm_data_deletion": "Please confirm data deletion by checking the box."
 }

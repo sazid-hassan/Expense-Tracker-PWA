@@ -12,6 +12,7 @@ interface StoreState {
   deleteCategory: (id: string) => void;
   updateSettings: (settings: AppSettings) => void;
   importData: (data: { transactions: Transaction[], categories: Category[], settings: AppSettings }) => void;
+  clearAllData: () => void;
 }
 
 const customStorage: PersistStorage<StoreState> = {
@@ -57,6 +58,7 @@ export const useStore = create<StoreState>()(
         })),
       updateSettings: (settings) => set({ settings }),
       importData: (data) => set({ transactions: data.transactions, categories: data.categories, settings: data.settings }),
+      clearAllData: () => set({ transactions: [], categories: [] }),
     }),
     {
       name: 'expense-tracker-storage', // unique name for localStorage key

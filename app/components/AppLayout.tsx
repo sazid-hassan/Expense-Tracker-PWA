@@ -25,9 +25,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     <>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            {t.expense_tracker}
-          </Typography>
+          <Typography variant="h6" component={Link} href="/" sx={{ flexGrow: 1, textDecoration: 'none', color: 'inherit' }}>            {t.expense_tracker}          </Typography>
           {isMobile ? (
             <Box>
               <IconButton
@@ -54,7 +52,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose} component={Link} href="/">{t.home}</MenuItem>
+                
                 <MenuItem onClick={handleClose} component={Link} href="/categories">{t.categories}</MenuItem>
                 <MenuItem onClick={handleClose} component={Link} href="/transactions">{t.transactions}</MenuItem>
                 <MenuItem onClick={handleClose} component={Link} href="/settings">{t.settings}</MenuItem>
@@ -62,7 +60,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </Box>
           ) : (
             <Box>
-              <Button color="inherit" component={Link} href="/">{t.home}</Button>
+              
               <Button color="inherit" component={Link} href="/categories">{t.categories}</Button>
               <Button color="inherit" component={Link} href="/transactions">{t.transactions}</Button>
               <Button color="inherit" component={Link} href="/settings">{t.settings}</Button>

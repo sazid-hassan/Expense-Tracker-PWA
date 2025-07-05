@@ -137,7 +137,7 @@ export default function CategoriesPage() {
 
   return (
     <>
-    <Box sx={{ p: { xs: 2, sm: 4 } }}>
+    <Box sx={{ pt: 1 }}>
       <Typography variant="h4" component="h1" gutterBottom>
         {t.categories}
       </Typography>
@@ -247,9 +247,9 @@ export default function CategoriesPage() {
                 </Button>
               </Box>
             ) : (
-              <Button variant="contained" onClick={handleAddCategory}>
-                {t.add_category}
-              </Button>
+              <Button fullWidth variant="contained" onClick={handleAddCategory}>
+              {t.add_category}
+            </Button>
             )}
           </Box>
         </Box>

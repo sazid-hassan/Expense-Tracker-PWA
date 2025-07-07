@@ -64,5 +64,19 @@
   "delete_all_data_message": "Esta acción eliminará permanentemente todas sus transacciones, categorías y configuraciones. Esto no se puede deshacer.",
   "i_understand_and_wish_to_continue": "Entiendo y deseo continuar",
   "all_data_deleted_successfully": "¡Todos los datos eliminados exitosamente!",
-  "please_confirm_data_deletion": "Por favor, confirme la eliminación de datos marcando la casilla."
+  "please_confirm_data_deletion": "Por favor, confirme la eliminación de datos marcando la casilla.",
+  "loading_translations": "Cargando traducciones...",
+  "uncategorized": "Sin categorizar",
+  "default_category_description": "Categoría predeterminada",
+  "transaction_updated_successfully": "¡Transacción actualizada exitosamente!",
+  "transaction_deleted_successfully": "¡Transacción eliminada exitosamente!",
+  "edit_transaction": "Editar Transacción",
+  "update_transaction": "Actualizar Transacción",
+  "delete_transaction": "Eliminar Transacción",
+  "are_you_sure_you_want_to_delete_this_transaction": "¿Está seguro de que desea eliminar esta transacción?",
+  "actions": "Acciones",
+  "this_month_income": "Ingresos de este mes",
+  "this_month_expenses": "Gastos de este mes",
+  "this_month_saving": "Ahorro de este mes",
+  "this_year_saving": "Ahorro de este año"
 }

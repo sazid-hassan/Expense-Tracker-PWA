@@ -35,19 +35,46 @@ import Alert from '@mui/material/Alert';
 import { useTranslation } from '../../hooks/useTranslation';
 
 export default function TransactionsPage() {
-  const { transactions, addTransaction, categories, settings } = useStore();
+  const { transactions, addTransaction, categories, settings, updateTransaction, deleteTransaction } = useStore();
   const [newTransaction, setNewTransaction] = useState<Omit<Transaction, 'id'> | null>(null);
+  const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
+  const [transactionToDelete, setTransactionToDelete] = useState<Transaction | null>(null);
   const [filterStartDate, setFilterStartDate] = useState<string>('');
   const [filterEndDate, setFilterEndDate] = useState<string>('');
   const [filterMonth, setFilterMonth] = useState<string>('');
   const [filterYear, setFilterYear] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  const handleOpenModal = () => setIsModalOpen(true);
+  const handleOpenModal = (transaction?: Transaction) => {
+    if (transaction) {
+      setEditingTransaction(transaction);
+    } else {
+      setNewTransaction({
+        date: new Date().toISOString().split('T')[0],
+        amount: 0,
+        type: 'expense',
+        category: categories[0] || { id: 'default', name: t.uncategorized, description: t.default_category_description, type: 'expense' },
+      });
+    }
+    setIsModalOpen(true);
+  };
+
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setNewTransaction(null);
+    setEditingTransaction(null);
+  };
+
+  const handleOpenDeleteModal = (transaction: Transaction) => {
+    setTransactionToDelete(transaction);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setTransactionToDelete(null);
+    setIsDeleteModalOpen(false);
   };
 
   const handleOpenFilterModal = () => setIsFilterModalOpen(true);
@@ -78,40 +105,64 @@ export default function TransactionsPage() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setNewTransaction(prev => {
-      const currentTransaction = prev || {
-        date: new Date().toISOString().split('T')[0],
-        amount: 0,
-        type: 'expense',
-        category: categories[0] || { id: 'default', name: 'Uncategorized', description: 'Default category', type: 'expense' },
-      };
-
-      if (name === 'amount') {
-        return { ...currentTransaction, amount: parseFloat(value) };
-      } else if (name === 'date') {
-        return { ...currentTransaction, date: value };
-      }
-      return currentTransaction;
-    });
+    if (editingTransaction) {
+      setEditingTransaction(prev => {
+        if (!prev) return null;
+        const updated = { ...prev };
+        if (name === 'amount') {
+          updated.amount = parseFloat(value);
+        } else if (name === 'date') {
+          updated.date = value;
+        }
+        return updated;
+      });
+    } else {
+      setNewTransaction(prev => {
+        const currentTransaction = prev || {
+          date: new Date().toISOString().split('T')[0],
+          amount: 0,
+          type: 'expense',
+          category: categories[0] || { id: 'default', name: t.uncategorized, description: t.default_category_description, type: 'expense' },
+        };
+        if (name === 'amount') {
+          return { ...currentTransaction, amount: parseFloat(value) };
+        } else if (name === 'date') {
+          return { ...currentTransaction, date: value };
+        }
+        return currentTransaction;
+      });
+    }
   };
 
   const handleSelectChange = (event: SelectChangeEvent<string>) => {
     const { name, value } = event.target;
-    setNewTransaction(prev => {
-      const currentTransaction = prev || {
-        date: new Date().toISOString().split('T')[0],
-        amount: 0,
-        type: 'expense',
-        category: categories[0] || { id: 'default', name: 'Uncategorized', description: 'Default category', type: 'expense' },
-      };
-
-      if (name === 'category') {
-        return { ...currentTransaction, category: categories.find(c => c.id === value) || currentTransaction.category };
-      } else if (name === 'type') {
-        return { ...currentTransaction, type: value as TransactionType };
-      }
-      return currentTransaction;
-    });
+    if (editingTransaction) {
+      setEditingTransaction(prev => {
+        if (!prev) return null;
+        const updated = { ...prev };
+        if (name === 'category') {
+          updated.category = categories.find(c => c.id === value) || updated.category;
+        } else if (name === 'type') {
+          updated.type = value as TransactionType;
+        }
+        return updated;
+      });
+    } else {
+      setNewTransaction(prev => {
+        const currentTransaction = prev || {
+          date: new Date().toISOString().split('T')[0],
+          amount: 0,
+          type: 'expense',
+          category: categories[0] || { id: 'default', name: t.uncategorized, description: t.default_category_description, type: 'expense' },
+        };
+        if (name === 'category') {
+          return { ...currentTransaction, category: categories.find(c => c.id === value) || currentTransaction.category };
+        } else if (name === 'type') {
+          return { ...currentTransaction, type: value as TransactionType };
+        }
+        return currentTransaction;
+      });
+    }
   };
 
   const handleAddTransaction = () => {
@@ -121,6 +172,22 @@ export default function TransactionsPage() {
       showSnackbar(t.transaction_added_successfully, 'success');
     } else {
       showSnackbar(t.please_select_category_for_transaction, 'error');
+    }
+  };
+
+  const handleUpdateTransaction = () => {
+    if (editingTransaction) {
+      updateTransaction(editingTransaction);
+      handleCloseModal();
+      showSnackbar(t.transaction_updated_successfully, 'success');
+    }
+  };
+
+  const handleDeleteTransaction = () => {
+    if (transactionToDelete) {
+      deleteTransaction(transactionToDelete.id);
+      handleCloseDeleteModal();
+      showSnackbar(t.transaction_deleted_successfully, 'success');
     }
   };
 
@@ -171,7 +238,7 @@ export default function TransactionsPage() {
   ];
 
   if (loading) {
-    return <Typography>Loading translations...</Typography>;
+    return <Typography>{t.loading_translations}</Typography>;
   }
 
   return (
@@ -185,7 +252,7 @@ export default function TransactionsPage() {
         <Button variant="outlined" color="secondary" onClick={handleOpenFilterModal}>
           {t.filter_transactions}
         </Button>
-        <Button variant="contained" onClick={handleOpenModal}>
+        <Button variant="contained" onClick={() => handleOpenModal()}>
           {t.add_new_transaction}
         </Button>
       </Box>
@@ -286,11 +353,15 @@ export default function TransactionsPage() {
               </AccordionSummary>
               <AccordionDetails>
                 <Typography>
-                  Date: {new Date(transaction.date).toLocaleDateString()}
+                  {t.date}: {new Date(transaction.date).toLocaleDateString()}
                 </Typography>
                 <Typography sx={{ textTransform: 'capitalize' }}>
-                  Type: {transaction.type}
+                  {t.type}: {transaction.type}
                 </Typography>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, mt: 1 }}>
+                  <Button size="small" variant="outlined" onClick={() => handleOpenModal(transaction)}>{t.edit}</Button>
+                  <Button size="small" variant="outlined" color="error" onClick={() => handleOpenDeleteModal(transaction)}>{t.delete}</Button>
+                </Box>
               </AccordionDetails>
             </Accordion>
           ))}
@@ -304,6 +375,7 @@ export default function TransactionsPage() {
                 <TableCell>{t.category}</TableCell>
                 <TableCell align="right">{t.amount}</TableCell>
                 <TableCell>{t.type}</TableCell>
+                <TableCell>{t.actions}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -320,6 +392,10 @@ export default function TransactionsPage() {
                     {transaction.type === 'income' ? '+' : '-'} {getCurrencySymbol(settings.currency)} {transaction.amount.toFixed(2)}
                   </TableCell>
                   <TableCell sx={{ textTransform: 'capitalize' }}>{transaction.type}</TableCell>
+                  <TableCell>
+                    <Button size="small" variant="outlined" onClick={() => handleOpenModal(transaction)}>{t.edit}</Button>
+                    <Button size="small" variant="outlined" color="error" onClick={() => handleOpenDeleteModal(transaction)} sx={{ ml: 1 }}>{t.delete}</Button>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -345,7 +421,7 @@ export default function TransactionsPage() {
           p: 4,
         }}>
           <Typography id="add-transaction-modal-title" variant="h6" component="h2" gutterBottom>
-            {t.add_new_transaction}
+            {editingTransaction ? t.edit_transaction : t.add_new_transaction}
           </Typography>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <TextField
@@ -353,7 +429,7 @@ export default function TransactionsPage() {
               type="date"
               label={t.date}
               name="date"
-              value={newTransaction?.date || new Date().toISOString().split('T')[0]}
+              value={editingTransaction?.date || newTransaction?.date || new Date().toISOString().split('T')[0]}
               onChange={handleInputChange}
               InputLabelProps={{ shrink: true }}
             />
@@ -363,7 +439,7 @@ export default function TransactionsPage() {
               label={t.amount}
               name="amount"
               placeholder={t.amount}
-              value={newTransaction?.amount || ''}
+              value={editingTransaction?.amount || newTransaction?.amount || ''}
               onChange={handleInputChange}
             />
             <FormControl fullWidth>
@@ -372,7 +448,7 @@ export default function TransactionsPage() {
                 labelId="category-label"
                 id="category"
                 name="category"
-                value={newTransaction?.category?.id || ''}
+                value={editingTransaction?.category?.id || newTransaction?.category?.id || ''}
                 onChange={handleSelectChange}
                 label={t.category}
               >
@@ -387,7 +463,7 @@ export default function TransactionsPage() {
                 labelId="type-label"
                 id="type"
                 name="type"
-                value={newTransaction?.type || 'expense'}
+                value={editingTransaction?.type || newTransaction?.type || 'expense'}
                 onChange={handleSelectChange}
                 label={t.type}
               >
@@ -395,12 +471,42 @@ export default function TransactionsPage() {
                 <MenuItem value="income">{t.income}</MenuItem>
               </Select>
             </FormControl>
-            <Button variant="contained" onClick={handleAddTransaction}>
-              {t.add_transaction}
+            <Button variant="contained" onClick={editingTransaction ? handleUpdateTransaction : handleAddTransaction}>
+              {editingTransaction ? t.update_transaction : t.add_transaction}
             </Button>
             <Button variant="outlined" onClick={handleCloseModal}>
               {t.cancel}
             </Button>
+          </Box>
+        </Box>
+      </Modal>
+
+      <Modal
+        open={isDeleteModalOpen}
+        onClose={handleCloseDeleteModal}
+        aria-labelledby="delete-transaction-modal-title"
+        aria-describedby="delete-transaction-modal-description"
+      >
+        <Box sx={{
+          position: 'absolute' ,
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: isMobile ? '90%' : 400,
+          bgcolor: 'background.paper',
+          border: '2px solid #000',
+          boxShadow: 24,
+          p: 4,
+        }}>
+          <Typography id="delete-transaction-modal-title" variant="h6" component="h2" gutterBottom>
+            {t.delete_transaction}
+          </Typography>
+          <Typography id="delete-transaction-modal-description" sx={{ mb: 2 }}>
+            {t.are_you_sure_you_want_to_delete_this_transaction}
+          </Typography>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
+            <Button variant="outlined" onClick={handleCloseDeleteModal}>{t.cancel}</Button>
+            <Button variant="contained" color="error" onClick={handleDeleteTransaction}>{t.delete}</Button>
           </Box>
         </Box>
       </Modal>

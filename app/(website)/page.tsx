@@ -2,7 +2,7 @@
 
 import { useStore } from '../store/useStore';
 
-  import {
+import {
   Paper,
   Typography,
   Box,
@@ -24,6 +24,29 @@ export default function HomePage() {
 
   const totalIncome = transactions.filter(t => t.type === 'income').reduce((acc, t) => acc + t.amount, 0);
   const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((acc, t) => acc + t.amount, 0);
+
+  const currentMonth = new Date().getMonth();
+  const currentYear = new Date().getFullYear();
+
+  const thisMonthIncome = transactions
+    .filter(t => new Date(t.date).getMonth() === currentMonth && new Date(t.date).getFullYear() === currentYear && t.type === 'income')
+    .reduce((acc, t) => acc + t.amount, 0);
+
+  const thisMonthExpenses = transactions
+    .filter(t => new Date(t.date).getMonth() === currentMonth && new Date(t.date).getFullYear() === currentYear && t.type === 'expense')
+    .reduce((acc, t) => acc + t.amount, 0);
+
+  const thisMonthSaving = thisMonthIncome - thisMonthExpenses;
+
+  const thisYearIncome = transactions
+    .filter(t => new Date(t.date).getFullYear() === currentYear && t.type === 'income')
+    .reduce((acc, t) => acc + t.amount, 0);
+
+  const thisYearExpenses = transactions
+    .filter(t => new Date(t.date).getFullYear() === currentYear && t.type === 'expense')
+    .reduce((acc, t) => acc + t.amount, 0);
+
+  const thisYearSaving = thisYearIncome - thisYearExpenses;
   const years = Array.from(new Set(transactions.map(t => new Date(t.date).getFullYear().toString()))).sort();
 
   const months = [
@@ -86,6 +109,7 @@ export default function HomePage() {
           {t.expense_tracker}
         </Typography>
 
+
         <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, mb: 4 }}>
           <Paper elevation={3} sx={{ p: 2, bgcolor: 'success.light', color: 'success.contrastText' }}>
             <Typography variant="h6">{t.total_income}</Typography>
@@ -95,12 +119,28 @@ export default function HomePage() {
             <Typography variant="h6">{t.total_expenses}</Typography>
             <Typography variant="h5">{getCurrencySymbol(settings.currency)} {totalExpenses.toFixed(2)}</Typography>
           </Paper>
-        </Box>
+          <Paper elevation={3} sx={{ p: 2, bgcolor: 'info.light', color: 'info.contrastText' }}>
+            <Typography variant="h6">{t.this_month_income}</Typography>
+            <Typography variant="h5">{getCurrencySymbol(settings.currency)} {thisMonthIncome.toFixed(2)}</Typography>
+          </Paper>
+          <Paper elevation={3} sx={{ p: 2, bgcolor: 'error.light', color: 'error.contrastText' }}>
+            <Typography variant="h6">{t.this_month_expenses}</Typography>
+            <Typography variant="h5">{getCurrencySymbol(settings.currency)} {thisMonthExpenses.toFixed(2)}</Typography>
+          </Paper>
+          <Paper elevation={3} sx={{ p: 2, bgcolor: 'info.light', color: 'info.contrastText' }}>
+            <Typography variant="h6">{t.this_month_saving}</Typography>
+            <Typography variant="h5">{getCurrencySymbol(settings.currency)} {thisMonthSaving.toFixed(2)}</Typography>
+          </Paper>
+          <Paper elevation={3} sx={{ p: 2, bgcolor: 'info.light', color: 'info.contrastText' }}>
+            <Typography variant="h6">{t.this_year_saving}</Typography>
+            <Typography variant="h5">{getCurrencySymbol(settings.currency)} {thisYearSaving.toFixed(2)}</Typography>
+          </Paper>
 
-        <Paper elevation={3} sx={{ p: 2, bgcolor: 'info.light', color: 'info.contrastText', mb: 4 }}>
-          <Typography variant="h6">Balance</Typography>
-          <Typography variant="h5">{getCurrencySymbol(settings.currency)} {(totalIncome - totalExpenses).toFixed(2)}</Typography>
-        </Paper>
+          <Paper elevation={3} sx={{ p: 2, bgcolor: 'info.light', color: 'info.contrastText', mb: 4 }}>
+            <Typography variant="h6">Balance</Typography>
+            <Typography variant="h5">{getCurrencySymbol(settings.currency)} {(totalIncome - totalExpenses).toFixed(2)}</Typography>
+          </Paper>
+        </Box>
 
         <Typography variant="h5" component="h2" gutterBottom sx={{ mt: 4 }}>
           Yearly Overview

@@ -64,5 +64,19 @@
   "delete_all_data_message": "سيؤدي هذا الإجراء إلى حذف جميع معاملاتك وفئاتك وإعداداتك بشكل دائم. لا يمكن التراجع عن هذا الإجراء.",
   "i_understand_and_wish_to_continue": "أنا أتفهم وأرغب في المتابعة",
   "all_data_deleted_successfully": "تم حذف جميع البيانات بنجاح!",
-  "please_confirm_data_deletion": "يرجى تأكيد حذف البيانات عن طريق تحديد المربع."
+  "please_confirm_data_deletion": "يرجى تأكيد حذف البيانات عن طريق تحديد المربع.",
+  "loading_translations": "جاري تحميل الترجمات...",
+  "uncategorized": "غير مصنف",
+  "default_category_description": "فئة افتراضية",
+  "transaction_updated_successfully": "تم تحديث المعاملة بنجاح!",
+  "transaction_deleted_successfully": "تم حذف المعاملة بنجاح!",
+  "edit_transaction": "تعديل المعاملة",
+  "update_transaction": "تحديث المعاملة",
+  "delete_transaction": "حذف المعاملة",
+  "are_you_sure_you_want_to_delete_this_transaction": "هل أنت متأكد أنك تريد حذف هذه المعاملة؟",
+  "actions": "الإجراءات",
+  "this_month_income": "دخل هذا الشهر",
+  "this_month_expenses": "مصروفات هذا الشهر",
+  "this_month_saving": "ادخار هذا الشهر",
+  "this_year_saving": "ادخار هذا العام"
 }

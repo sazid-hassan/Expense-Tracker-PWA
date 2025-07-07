@@ -64,5 +64,19 @@
   "delete_all_data_message": "এই ক্রিয়াটি আপনার সমস্ত লেনদেন, বিভাগ এবং সেটিংস স্থায়ীভাবে মুছে ফেলবে। এটি পূর্বাবস্থায় ফেরানো যাবে না।",
   "i_understand_and_wish_to_continue": "আমি বুঝি এবং চালিয়ে যেতে চাই",
   "all_data_deleted_successfully": "সমস্ত ডেটা সফলভাবে মুছে ফেলা হয়েছে!",
-  "please_confirm_data_deletion": "অনুগ্রহ করে বক্সটি চেক করে ডেটা মোছা নিশ্চিত করুন।"
+  "please_confirm_data_deletion": "অনুগ্রহ করে বক্সটি চেক করে ডেটা মোছা নিশ্চিত করুন।",
+  "loading_translations": "অনুবাদ লোড হচ্ছে...",
+  "uncategorized": "শ্রেণীবিহীন",
+  "default_category_description": "ডিফল্ট ক্যাটাগরি",
+  "transaction_updated_successfully": "লেনদেন সফলভাবে আপডেট করা হয়েছে!",
+  "transaction_deleted_successfully": "লেনদেন সফলভাবে মুছে ফেলা হয়েছে!",
+  "edit_transaction": "লেনদেন সম্পাদনা করুন",
+  "update_transaction": "লেনদেন আপডেট করুন",
+  "delete_transaction": "লেনদেন মুছুন",
+  "are_you_sure_you_want_to_delete_this_transaction": "আপনি কি নিশ্চিত যে আপনি এই লেনদেনটি মুছে ফেলতে চান?",
+  "actions": "ক্রিয়াকলাপ",
+  "this_month_income": "এই মাসের আয়",
+  "this_month_expenses": "এই মাসের খরচ",
+  "this_month_saving": "এই মাসের সঞ্চয়",
+  "this_year_saving": "এই বছরের সঞ্চয়"
 }

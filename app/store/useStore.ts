@@ -7,6 +7,8 @@ interface StoreState {
   categories: Category[];
   settings: AppSettings;
   addTransaction: (transaction: Transaction) => void;
+  updateTransaction: (transaction: Transaction) => void;
+  deleteTransaction: (id: string) => void;
   addCategory: (category: Category) => void;
   updateCategory: (category: Category) => void;
   deleteCategory: (id: string) => void;
@@ -41,6 +43,18 @@ export const useStore = create<StoreState>()(
       addTransaction: (transaction) =>
         set((state) => ({
           transactions: [...state.transactions, transaction],
+        })),
+      updateTransaction: (updatedTransaction) =>
+        set((state) => ({
+          transactions: state.transactions.map((transaction) =>
+            transaction.id === updatedTransaction.id ? updatedTransaction : transaction
+          ),
+        })),
+      deleteTransaction: (id) =>
+        set((state) => ({
+          transactions: state.transactions.filter(
+            (transaction) => transaction.id !== id
+          ),
         })),
       addCategory: (category) =>
         set((state) => ({

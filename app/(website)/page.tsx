@@ -115,7 +115,7 @@ export default function HomePage() {
             <Typography variant="h6">{t.total_income}</Typography>
             <Typography variant="h5">{getCurrencySymbol(settings.currency)} {totalIncome.toFixed(2)}</Typography>
           </Paper>
-          <Paper elevation={3} sx={{ p: 2, bgcolor: 'error.light', color: 'error.contrastText' }}>
+          <Paper elevation={3} sx={{ p: 2, bgcolor: 'error.dark', color: 'error.contrastText' }}>
             <Typography variant="h6">{t.total_expenses}</Typography>
             <Typography variant="h5">{getCurrencySymbol(settings.currency)} {totalExpenses.toFixed(2)}</Typography>
           </Paper>
@@ -127,11 +127,11 @@ export default function HomePage() {
             <Typography variant="h6">{t.this_month_expenses}</Typography>
             <Typography variant="h5">{getCurrencySymbol(settings.currency)} {thisMonthExpenses.toFixed(2)}</Typography>
           </Paper>
-          <Paper elevation={3} sx={{ p: 2, bgcolor: 'info.light', color: 'info.contrastText' }}>
+          <Paper elevation={3} sx={{ p: 2, bgcolor: 'success.light', color: 'info.contrastText' }}>
             <Typography variant="h6">{t.this_month_saving}</Typography>
             <Typography variant="h5">{getCurrencySymbol(settings.currency)} {thisMonthSaving.toFixed(2)}</Typography>
           </Paper>
-          <Paper elevation={3} sx={{ p: 2, bgcolor: 'info.light', color: 'info.contrastText' }}>
+          <Paper elevation={3} sx={{ p: 2, bgcolor: 'success.dark', color: 'info.contrastText' }}>
             <Typography variant="h6">{t.this_year_saving}</Typography>
             <Typography variant="h5">{getCurrencySymbol(settings.currency)} {thisYearSaving.toFixed(2)}</Typography>
           </Paper>

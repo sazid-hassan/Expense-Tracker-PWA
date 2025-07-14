@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist, PersistStorage } from 'zustand/middleware';
 import { Transaction, Category, AppSettings, Currency, Language } from '../types';
+import { v4 as uuidv4 } from 'uuid';
 
 interface StoreState {
   transactions: Transaction[];
@@ -19,22 +20,59 @@ interface StoreState {
 
 const customStorage: PersistStorage<StoreState> = {
   getItem: (name) => {
-    const item = localStorage.getItem(name);
+    const item = typeof window !== 'undefined' ? localStorage.getItem(name) : null;
     return item ? JSON.parse(item) : null;
   },
   setItem: (name, value) => {
-    localStorage.setItem(name, JSON.stringify(value));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(name, JSON.stringify(value));
+    }
   },
   removeItem: (name) => {
-    localStorage.removeItem(name);
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(name);
+    }
   },
 };
+
+const defaultCategories: Category[] = [
+  {
+    id: uuidv4(),
+    name: 'Rent',
+    description: 'Monthly rent payment',
+    type: 'expense',
+  },
+  {
+    id: uuidv4(),
+    name: 'Electric Bill',
+    description: 'Monthly electricity bill',
+    type: 'expense',
+  },
+  {
+    id: uuidv4(),
+    name: 'Internet Bill',
+    description: 'Monthly internet bill',
+    type: 'expense',
+  },
+  {
+    id: uuidv4(),
+    name: 'Groceries',
+    description: 'Daily food and household items',
+    type: 'expense',
+  },
+  {
+    id: uuidv4(),
+    name: 'Salary',
+    description: 'Monthly income from job',
+    type: 'income',
+  }
+];
 
 export const useStore = create<StoreState>()(
   persist(
     (set) => ({
       transactions: [],
-      categories: [],
+      categories: defaultCategories,
       settings: {
         currency: Currency.USD,
         userName: 'User',

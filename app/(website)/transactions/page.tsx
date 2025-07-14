@@ -2,8 +2,7 @@
 
 import { useState } from 'react';
 import { useStore } from '../../store/useStore';
-import { Transaction, TransactionType } from '../../types';
-import { v4 as uuidv4 } from 'uuid';
+import { Transaction } from '../../types';
 
   import {
   Table,
@@ -21,23 +20,23 @@ import { v4 as uuidv4 } from 'uuid';
   FormControl,
   Typography,
   Box,
-  SelectChangeEvent,
   Accordion,
   AccordionSummary,
   AccordionDetails,
   useMediaQuery,
   useTheme,
   Modal,
+  TablePagination,
 } from '@mui/material';
 
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { useTranslation } from '../../hooks/useTranslation';
+import TransactionModal from '../../components/TransactionModal';
 
 export default function TransactionsPage() {
-  const { transactions, addTransaction, categories, settings, updateTransaction, deleteTransaction } = useStore();
-  const [newTransaction, setNewTransaction] = useState<Omit<Transaction, 'id'> | null>(null);
-  const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
+  const { transactions, settings,  deleteTransaction } = useStore();
+  const [transactionToEdit, setTransactionToEdit] = useState<Transaction | null>(null);
   const [transactionToDelete, setTransactionToDelete] = useState<Transaction | null>(null);
   const [filterStartDate, setFilterStartDate] = useState<string>('');
   const [filterEndDate, setFilterEndDate] = useState<string>('');
@@ -46,25 +45,17 @@ export default function TransactionsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(20);
 
   const handleOpenModal = (transaction?: Transaction) => {
-    if (transaction) {
-      setEditingTransaction(transaction);
-    } else {
-      setNewTransaction({
-        date: new Date().toISOString().split('T')[0],
-        amount: 0,
-        type: 'expense',
-        category: categories[0] || { id: 'default', name: t.uncategorized, description: t.default_category_description, type: 'expense' },
-      });
-    }
+    setTransactionToEdit(transaction || null);
     setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setNewTransaction(null);
-    setEditingTransaction(null);
+    setTransactionToEdit(null);
   };
 
   const handleOpenDeleteModal = (transaction: Transaction) => {
@@ -103,86 +94,6 @@ export default function TransactionsPage() {
     setSnackbarOpen(false);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    if (editingTransaction) {
-      setEditingTransaction(prev => {
-        if (!prev) return null;
-        const updated = { ...prev };
-        if (name === 'amount') {
-          updated.amount = parseFloat(value);
-        } else if (name === 'date') {
-          updated.date = value;
-        }
-        return updated;
-      });
-    } else {
-      setNewTransaction(prev => {
-        const currentTransaction = prev || {
-          date: new Date().toISOString().split('T')[0],
-          amount: 0,
-          type: 'expense',
-          category: categories[0] || { id: 'default', name: t.uncategorized, description: t.default_category_description, type: 'expense' },
-        };
-        if (name === 'amount') {
-          return { ...currentTransaction, amount: parseFloat(value) };
-        } else if (name === 'date') {
-          return { ...currentTransaction, date: value };
-        }
-        return currentTransaction;
-      });
-    }
-  };
-
-  const handleSelectChange = (event: SelectChangeEvent<string>) => {
-    const { name, value } = event.target;
-    if (editingTransaction) {
-      setEditingTransaction(prev => {
-        if (!prev) return null;
-        const updated = { ...prev };
-        if (name === 'category') {
-          updated.category = categories.find(c => c.id === value) || updated.category;
-        } else if (name === 'type') {
-          updated.type = value as TransactionType;
-        }
-        return updated;
-      });
-    } else {
-      setNewTransaction(prev => {
-        const currentTransaction = prev || {
-          date: new Date().toISOString().split('T')[0],
-          amount: 0,
-          type: 'expense',
-          category: categories[0] || { id: 'default', name: t.uncategorized, description: t.default_category_description, type: 'expense' },
-        };
-        if (name === 'category') {
-          return { ...currentTransaction, category: categories.find(c => c.id === value) || currentTransaction.category };
-        } else if (name === 'type') {
-          return { ...currentTransaction, type: value as TransactionType };
-        }
-        return currentTransaction;
-      });
-    }
-  };
-
-  const handleAddTransaction = () => {
-    if (newTransaction && newTransaction.category) {
-      addTransaction({ ...newTransaction, id: uuidv4() });
-      setNewTransaction(null);
-      showSnackbar(t.transaction_added_successfully, 'success');
-    } else {
-      showSnackbar(t.please_select_category_for_transaction, 'error');
-    }
-  };
-
-  const handleUpdateTransaction = () => {
-    if (editingTransaction) {
-      updateTransaction(editingTransaction);
-      handleCloseModal();
-      showSnackbar(t.transaction_updated_successfully, 'success');
-    }
-  };
-
   const handleDeleteTransaction = () => {
     if (transactionToDelete) {
       deleteTransaction(transactionToDelete.id);
@@ -191,7 +102,9 @@ export default function TransactionsPage() {
     }
   };
 
-  const filteredTransactions = transactions.filter(transaction => {
+  const sortedTransactions = transactions.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+  const filteredTransactions = sortedTransactions.filter(transaction => {
     const transactionDate = new Date(transaction.date);
 
     // Date Range Filter
@@ -220,6 +133,18 @@ export default function TransactionsPage() {
 
     return true;
   });
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const paginatedTransactions = filteredTransactions.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+
   const years = Array.from(new Set(transactions.map(t => new Date(t.date).getFullYear().toString()))).sort();
 
   const months = [
@@ -337,7 +262,7 @@ export default function TransactionsPage() {
 
       {isMobile ? (
         <Box>
-          {filteredTransactions.map((transaction) => (
+          {paginatedTransactions.map((transaction) => (
             <Accordion key={transaction.id}>
               <AccordionSummary
                 expandIcon={<span>&#9660;</span>}
@@ -367,119 +292,61 @@ export default function TransactionsPage() {
           ))}
         </Box>
       ) : (
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>{t.date}</TableCell>
-                <TableCell>{t.category}</TableCell>
-                <TableCell align="right">{t.amount}</TableCell>
-                <TableCell>{t.type}</TableCell>
-                <TableCell>{t.actions}</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {filteredTransactions.map((transaction) => (
-                <TableRow
-                  key={transaction.id}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    {new Date(transaction.date).toLocaleDateString()}
-                  </TableCell>
-                  <TableCell>{transaction.category.name}</TableCell>
-                  <TableCell align="right" sx={{ color: transaction.type === 'income' ? 'green' : 'red' }}>
-                    {transaction.type === 'income' ? '+' : '-'} {getCurrencySymbol(settings.currency)} {transaction.amount.toFixed(2)}
-                  </TableCell>
-                  <TableCell sx={{ textTransform: 'capitalize' }}>{transaction.type}</TableCell>
-                  <TableCell>
-                    <Button size="small" variant="outlined" onClick={() => handleOpenModal(transaction)}>{t.edit}</Button>
-                    <Button size="small" variant="outlined" color="error" onClick={() => handleOpenDeleteModal(transaction)} sx={{ ml: 1 }}>{t.delete}</Button>
-                  </TableCell>
+        <Paper>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>{t.date}</TableCell>
+                  <TableCell>{t.category}</TableCell>
+                  <TableCell align="right">{t.amount}</TableCell>
+                  <TableCell>{t.type}</TableCell>
+                  <TableCell>{t.actions}</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+              </TableHead>
+              <TableBody>
+                {paginatedTransactions.map((transaction) => (
+                  <TableRow
+                    key={transaction.id}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {new Date(transaction.date).toLocaleDateString()}
+                    </TableCell>
+                    <TableCell>{transaction.category.name}</TableCell>
+                    <TableCell align="right" sx={{ color: transaction.type === 'income' ? 'green' : 'red' }}>
+                      {transaction.type === 'income' ? '+' : '-'} {getCurrencySymbol(settings.currency)} {transaction.amount.toFixed(2)}
+                    </TableCell>
+                    <TableCell sx={{ textTransform: 'capitalize' }}>{transaction.type}</TableCell>
+                    <TableCell>
+                      <Button size="small" variant="outlined" onClick={() => handleOpenModal(transaction)}>{t.edit}</Button>
+                      <Button size="small" variant="outlined" color="error" onClick={() => handleOpenDeleteModal(transaction)} sx={{ ml: 1 }}>{t.delete}</Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[20, 50, 100, 200]}
+            component="div"
+            count={filteredTransactions.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Paper>
       )}
 
-      <Modal
-        open={isModalOpen}
-        onClose={handleCloseModal}
-        aria-labelledby="add-transaction-modal-title"
-        aria-describedby="add-transaction-modal-description"
-      >
-        <Box sx={{
-          position: 'absolute' ,
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: isMobile ? '90%' : 400,
-          bgcolor: 'background.paper',
-          border: '2px solid #000',
-          boxShadow: 24,
-          p: 4,
-        }}>
-          <Typography id="add-transaction-modal-title" variant="h6" component="h2" gutterBottom>
-            {editingTransaction ? t.edit_transaction : t.add_new_transaction}
-          </Typography>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <TextField
-              fullWidth
-              type="date"
-              label={t.date}
-              name="date"
-              value={editingTransaction?.date || newTransaction?.date || new Date().toISOString().split('T')[0]}
-              onChange={handleInputChange}
-              InputLabelProps={{ shrink: true }}
-            />
-            <TextField
-              fullWidth
-              type="number"
-              label={t.amount}
-              name="amount"
-              placeholder={t.amount}
-              value={editingTransaction?.amount || newTransaction?.amount || ''}
-              onChange={handleInputChange}
-            />
-            <FormControl fullWidth>
-              <InputLabel id="category-label">{t.category}</InputLabel>
-              <Select
-                labelId="category-label"
-                id="category"
-                name="category"
-                value={editingTransaction?.category?.id || newTransaction?.category?.id || ''}
-                onChange={handleSelectChange}
-                label={t.category}
-              >
-                {categories.map(category => (
-                  <MenuItem key={category.id} value={category.id}>{category.name}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <FormControl fullWidth>
-              <InputLabel id="type-label">{t.type}</InputLabel>
-              <Select
-                labelId="type-label"
-                id="type"
-                name="type"
-                value={editingTransaction?.type || newTransaction?.type || 'expense'}
-                onChange={handleSelectChange}
-                label={t.type}
-              >
-                <MenuItem value="expense">{t.expense}</MenuItem>
-                <MenuItem value="income">{t.income}</MenuItem>
-              </Select>
-            </FormControl>
-            <Button variant="contained" onClick={editingTransaction ? handleUpdateTransaction : handleAddTransaction}>
-              {editingTransaction ? t.update_transaction : t.add_transaction}
-            </Button>
-            <Button variant="outlined" onClick={handleCloseModal}>
-              {t.cancel}
-            </Button>
-          </Box>
-        </Box>
-      </Modal>
+      {isModalOpen && (
+        <TransactionModal
+          open={isModalOpen}
+          onClose={handleCloseModal}
+          transaction={transactionToEdit}
+          showSnackbar={showSnackbar}
+        />
+      )}
 
       <Modal
         open={isDeleteModalOpen}

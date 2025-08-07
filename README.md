@@ -1,33 +1,84 @@
 # Expense Tracker
 
-A simple, responsive, and progressive web application (PWA) for tracking personal expenses and income. This application is built with Next.js and utilizes Zustand for state management with local persistence, Material-UI for a modern user interface, and includes internationalization (i18n) support.
+A modern, responsive, and progressive web application (PWA) for tracking personal expenses and income. This application is built with Next.js 15 and features a beautiful mobile-first design with bottom navigation, comprehensive loading animations, Zustand for state management with local persistence, Material-UI for a modern user interface, and full internationalization (i18n) support.
 
 ## Features
 
-*   **Transaction Management:** Add, view, and categorize income and expense transactions. Transactions can be filtered by date range, month, and year.
-*   **Category Management:** Create, edit, and delete custom categories for transactions. Edit and delete actions are represented by intuitive icons.
-*   **Data Persistence:** All transaction, category, and user settings are automatically saved locally in the browser's `localStorage`.
-*   **Data Import/Export:** Ability to export all application data (transactions, categories, and settings) to a JSON file and import it back.
-*   **Data Deletion:** A "Delete All Data" option in settings allows users to clear all their data with a confirmation step.
-*   **Interactive Charts:** Visualize financial data with yearly and monthly income/expense line charts, and a category-wise spending bar chart on the homepage.
-*   **Responsive Design:** Optimized for various screen sizes, including mobile (with a hamburger menu).
-*   **Internationalization (i18n):** Supports multiple languages (English, Bangla, Dutch, Spanish, Portuguese, Arabic) for a localized user experience.
-*   **PWA Capabilities:** Configured for offline access and installability on supported devices.
+### 📊 **Financial Management**
+*   **Transaction Management:** Add, view, and categorize income and expense transactions with smart category auto-selection
+*   **Advanced Filtering:** Filter transactions by date range, month, and year with intuitive modal filters
+*   **Category Management:** Create, edit, and delete custom categories with emoji icons for easy identification
+*   **Interactive Charts:** Visualize financial data with yearly and monthly income/expense line charts, and category-wise spending bar charts
+*   **Real-time Analytics:** Track total income, expenses, monthly savings, and overall balance with color-coded metrics
+
+### 📱 **Mobile-First Design**
+*   **Bottom Navigation:** Thumb-friendly bottom navigation bar for mobile devices with smooth animations
+*   **Responsive Layout:** Adaptive design that works seamlessly across desktop, tablet, and mobile devices
+*   **Touch Optimized:** Enhanced touch interactions with proper gesture handling and visual feedback
+*   **Floating Action Button:** Quick access to add transactions with smart positioning above bottom navigation
+
+### ✨ **Beautiful Loading System**
+*   **6 Loader Variants:** Spinner, dots, pulse, skeleton, overlay, and inline loaders for different contexts
+*   **Smooth Animations:** GPU-accelerated CSS animations with fade-in effects and modern transitions
+*   **Global Loading State:** System-wide loading management with customizable messages and variants
+*   **Smart Fallbacks:** Graceful handling of loading states with automatic category selection when data loads
+
+### 💾 **Data Management**
+*   **Local Persistence:** All data automatically saved to browser's `localStorage` with SSR-safe implementation
+*   **Import/Export:** Export data to JSON with beautiful loading animations, import with validation and progress feedback
+*   **Data Deletion:** Secure "Delete All Data" option with confirmation dialogs and loading states
+*   **Backup-Friendly:** Easy data migration between devices using JSON export/import
+
+### 🌍 **Internationalization & Accessibility**
+*   **6 Languages:** English, Bangla, Dutch, Spanish, Portuguese, Arabic with RTL support
+*   **Dynamic Loading:** Translations loaded on-demand with elegant loading animations
+*   **Accessibility:** ARIA labels, keyboard navigation, and screen reader support
+*   **Type Safety:** Full TypeScript coverage for better developer experience and reliability
+
+### 🚀 **Progressive Web App**
+*   **Offline Capabilities:** Service worker implementation for offline access
+*   **Installable:** Can be installed on devices like a native app
+*   **Performance Optimized:** Fast loading with efficient caching strategies
+*   **Modern Web Standards:** Uses latest web technologies for optimal performance
 
 ## Technologies Used
 
-*   **Framework:** [Next.js](https://nextjs.org/) (App Router)
-*   **State Management:** [Zustand](https://zustand-bear.github.io/)
-*   **UI Library:** [Material-UI (MUI)](https://mui.com/)
-*   **PWA:** [next-pwa](https://www.npmjs.com/package/next-pwa)
-*   **Styling:** CSS Modules (via `globals.css`)
-*   **Unique IDs:** [uuid](https://www.npmjs.com/package/uuid)
-*   **Linting:** ESLint
-*   **Type Checking:** TypeScript
+### **Core Technologies**
+*   **Framework:** [Next.js 15.3.5](https://nextjs.org/) with App Router
+*   **Language:** [TypeScript 5.8.3](https://www.typescriptlang.org/) for type safety
+*   **State Management:** [Zustand 5.0.6](https://zustand-bear.github.io/) with persistence middleware
+
+### **UI & Design**
+*   **UI Library:** [Material-UI (MUI) 7.2.0](https://mui.com/) with Emotion styling
+*   **Icons:** Material Icons with extensive icon set
+*   **Styling:** TailwindCSS 4 + Material-UI for modern design system
+*   **Animations:** CSS keyframes with GPU acceleration
+*   **Charts:** [Recharts 3.0.2](https://recharts.org/) for data visualization
+
+### **PWA & Performance**
+*   **PWA:** [next-pwa 5.6.0](https://www.npmjs.com/package/next-pwa) for offline capabilities
+*   **Service Worker:** Automatic caching and offline functionality
+*   **Performance:** Optimized loading with skeleton screens and lazy loading
+
+### **Development Tools**
+*   **Linting:** ESLint with Next.js configuration
+*   **Unique IDs:** [uuid 11.1.0](https://www.npmjs.com/package/uuid) for data integrity
+*   **Build Tool:** Next.js build system with optimization
 
 ## Language Support
 
-The application supports English, Bangla, Dutch, Spanish, Portuguese, and Arabic. These languages can be selected from the settings page.
+The application supports **6 languages** with full internationalization:
+
+| Language | Code | RTL Support | Status |
+|----------|------|-------------|---------|
+| English | EN | ❌ | ✅ Complete |
+| Bangla | BN | ❌ | ✅ Complete |
+| Dutch | NL | ❌ | ✅ Complete |
+| Spanish | ES | ❌ | ✅ Complete |
+| Portuguese | PT | ❌ | ✅ Complete |
+| Arabic | AR | ✅ | ✅ Complete |
+
+Languages can be easily selected from the settings page with instant switching and beautiful loading animations.
 
 ## Getting Started
 
@@ -80,50 +131,78 @@ npm run start
 ```
 expense-tracker/
 ├── app/
-│   ├── (website)/              # Grouping for website-related pages
-│   │   ├── categories/         # Category management page
+│   ├── (website)/              # Route groups for organized pages
+│   │   ├── categories/         # Category management with CRUD operations
 │   │   │   └── page.tsx
-│   │   ├── settings/           # Application settings page
+│   │   ├── settings/           # User preferences and data management
 │   │   │   └── page.tsx
-│   │   ├── transactions/       # Transaction management page
+│   │   ├── transactions/       # Transaction management with filtering
 │   │   │   └── page.tsx
-│   │   └── page.tsx            # Home page
-│   ├── components/             # Reusable UI components (e.g., AppLayout)
-│   │   └── AppLayout.tsx
-│   ├── hooks/                  # Custom React hooks (e.g., useTranslation)
-│   │   └── useTranslation.ts
-│   ├── locales/                # JSON translation files for i18n
-│   │   ├── ar.json
-│   │   ├── bn.json
-│   │   ├── en.json
-│   │   ├── es.json
-│   │   ├── nl.json
-│   │   └── pt.json
-│   ├── store/                  # Zustand store for global state management
-│   │   └── useStore.ts
-│   ├── types/                  # TypeScript type definitions
-│   │   └── index.ts
+│   │   └── page.tsx            # Dashboard with charts and analytics
+│   ├── components/             # Reusable UI components
+│   │   ├── AppLayout.tsx       # Main layout with navigation
+│   │   ├── TransactionModal.tsx # Transaction add/edit modal
+│   │   ├── Loader.tsx          # Beautiful loading components system
+│   │   └── GlobalLoader.tsx    # Global loading state management
+│   ├── hooks/                  # Custom React hooks
+│   │   └── useTranslation.ts   # i18n hook with loading states
+│   ├── locales/                # Translation files (6 languages)
+│   │   ├── ar.json            # Arabic (RTL)
+│   │   ├── bn.json            # Bangla
+│   │   ├── en.json            # English (default)
+│   │   ├── es.json            # Spanish
+│   │   ├── nl.json            # Dutch
+│   │   └── pt.json            # Portuguese
+│   ├── store/                  # Global state management
+│   │   └── useStore.ts         # Zustand store with persistence + loading
+│   ├── types/                  # TypeScript definitions
+│   │   └── index.ts            # Interfaces and enums
 │   ├── favicon.ico
-│   ├── globals.css             # Global CSS styles
-│   └── layout.tsx              # Root layout component (Next.js App Router)
-├── public/                     # Static assets (images, manifest.json, sw.js)
-├── .gitignore
-├── eslint.config.mjs
-├── next-env.d.ts
-├── next.config.js
-├── package.json
-├── postcss.config.mjs
-├── README.md
-└── tsconfig.json
+│   ├── globals.css             # Global styles with TailwindCSS
+│   └── layout.tsx              # Root layout with PWA configuration
+├── public/                     # Static assets and PWA files
+│   ├── icons/                  # PWA icons for installation
+│   ├── manifest.json           # PWA manifest
+│   └── sw.js                   # Service worker for offline support
+├── Configuration Files
+├── eslint.config.mjs           # ESLint configuration
+├── next.config.mjs             # Next.js + PWA configuration
+├── package.json                # Dependencies and scripts
+├── postcss.config.mjs          # PostCSS configuration
+├── tsconfig.json               # TypeScript configuration
+└── README.md                   # This file
 ```
 
 ## Key Concepts & Architecture
 
-*   **Next.js App Router:** The project leverages Next.js 13+ App Router for routing and server-side rendering capabilities, although most components are client-side (`'use client'`).
-*   **Zustand State Management:** `app/store/useStore.ts` defines the global state using Zustand. It includes `transactions`, `categories`, and `settings`. The `zustand/middleware/persist` is used to automatically save and load this state from `localStorage`, ensuring data persistence across sessions.
-*   **Material-UI (MUI):** All UI components are built using MUI, providing a consistent and modern design language.
-*   **Internationalization (i18n):** The `app/hooks/useTranslation.ts` hook dynamically loads translation strings from `app/locales/*.json` files based on the `language` setting in the Zustand store. This allows for easy addition of new languages and centralized management of text content.
-*   **Type Safety:** The entire codebase is written in TypeScript, ensuring type safety and improving code maintainability.
+### **🏗️ Application Architecture**
+*   **Next.js 15 App Router:** Leverages the latest App Router for file-based routing, server components, and optimal performance
+*   **Client-Side First:** Most components use `'use client'` for rich interactivity and real-time state updates
+*   **Mobile-First Design:** Built with mobile devices as the primary target, then enhanced for larger screens
+
+### **📊 State Management**
+*   **Zustand Store:** Centralized state management with `transactions`, `categories`, `settings`, and `loading` states
+*   **Persistence Middleware:** Automatic localStorage sync with SSR-safe implementation
+*   **Loading State Management:** Global loading system with customizable messages and animation variants
+*   **Type-Safe Actions:** All state mutations are strongly typed for developer experience
+
+### **🎨 UI/UX Architecture**
+*   **Material-UI Foundation:** Consistent design system with theme integration and responsive components
+*   **Bottom Navigation:** Mobile-optimized thumb navigation with route-aware highlighting
+*   **Loading System:** 6 different loading variants (spinner, dots, pulse, skeleton, overlay, inline) for contextual feedback
+*   **Animation Framework:** GPU-accelerated CSS animations with smooth transitions and micro-interactions
+
+### **🌐 Internationalization System**
+*   **Dynamic Loading:** Translation files loaded on-demand with beautiful loading states
+*   **Zustand Integration:** Language preference stored in global state with instant switching
+*   **RTL Support:** Ready for right-to-left languages like Arabic
+*   **Extensible:** Easy addition of new languages through JSON files and enum updates
+
+### **🔧 Development Experience**
+*   **TypeScript First:** Full type coverage with interfaces, enums, and strict type checking
+*   **Component Architecture:** Reusable components with props validation and consistent API
+*   **Performance Optimization:** Lazy loading, code splitting, and efficient re-rendering patterns
+*   **PWA Implementation:** Service worker, manifest, and offline-first architecture
 
 ## Contributing
 
@@ -148,30 +227,82 @@ npm run lint
 
 To add a new language:
 
-1.  Add the new language to the `Language` enum in `app/types/index.ts`.
-2.  Create a new JSON file (e.g., `xx.json`) in `app/locales/` with translations for all keys present in `en.json`.
-3.  Add the new language to the `loadTranslations` switch statement in `app/hooks/useTranslation.ts`.
+1.  **Add Language Enum:** Add the new language to the `Language` enum in `app/types/index.ts`
+2.  **Create Translation File:** Create a new JSON file (e.g., `fr.json`) in `app/locales/` with translations for all keys present in `en.json`
+3.  **Update Hook:** Add the new language case in the `loadTranslations` switch statement in `app/hooks/useTranslation.ts`
+4.  **Test Loading:** Verify the new language loads properly with the loading animation system
+
+### Adding New Loader Variants
+
+To create custom loader animations:
+
+1.  **Define Variant:** Add new variant type to `LoaderVariant` in `app/components/Loader.tsx`
+2.  **Create Animation:** Add CSS keyframes for your custom animation
+3.  **Implement Renderer:** Add render function in the `getLoaderContent()` switch statement
+4.  **Update Types:** Ensure TypeScript types are updated for the new variant
 
 ## Troubleshooting
 
-*   **`EPERM: operation not permitted, open '.next\trace'` or similar file access errors on Windows:**
-    This often occurs when a process holds a lock on a file. Try the following:
-    1.  Close any running development servers or IDEs.
-    2.  Manually delete the `.next` folder in the project root.
-    3.  If the issue persists, restart your computer.
+### **🔧 Common Issues**
 
-*   **`TypeError: Cannot read properties of undefined (reading 'deploymentId')` or other build errors after `npm install`:**
-    This can indicate corrupted `node_modules` or `package-lock.json`. Try a clean reinstall:
-    ```bash
-    npm cache clean --force
-    rmdir /s /q node_modules # Use `rm -rf node_modules` on macOS/Linux
-    del package-lock.json # Use `rm package-lock.json` on macOS/Linux
-    npm install
-    ```
+**Build/Development Issues:**
+*   **Next.js Build Errors:** Delete `.next` folder and `node_modules`, then run `npm install`
+*   **File Permission Errors (Windows):** Close all IDEs and development servers, restart if needed
+*   **Hydration Mismatches:** Ensure localStorage data has proper fallbacks for SSR
 
-*   **Hydration Mismatch Errors:**
-    These typically happen when server-rendered HTML doesn't match client-rendered content. Ensure that any data loaded from `localStorage` or other client-side-only sources is handled appropriately, often by conditionally rendering components after hydration or providing default values.
+**Loading System Issues:**
+*   **Categories Not Loading:** Clear browser localStorage and refresh to reset state
+*   **Translations Stuck:** Check browser console for network errors, reload to retry
+*   **Modal Won't Open:** Verify categories have loaded properly, check browser console
 
-## License
+**Mobile/Navigation Issues:**
+*   **Bottom Navigation Not Showing:** Ensure you're viewing on mobile breakpoint (< 600px width)
+*   **FAB Button Not Working:** Check if categories are loaded, try clearing localStorage
+*   **Touch Events Not Working:** Ensure proper touch-action CSS properties are applied
 
-This project is licensed under the MIT License. See the `LICENSE` file for details. (Note: A `LICENSE` file is not included in the current project structure, but it's good practice to add one.)
+### **🧹 Clean Installation**
+```bash
+# Complete clean install
+npm cache clean --force
+rm -rf node_modules package-lock.json .next
+npm install
+npm run dev
+```
+
+### **📱 PWA Issues**
+*   **App Not Installing:** Check manifest.json and ensure HTTPS in production
+*   **Offline Mode Not Working:** Verify service worker registration in browser DevTools
+*   **Icons Not Showing:** Check public/icons/ directory for proper PWA icon files
+
+## Recent Updates & Changelog
+
+### **Version 2.0.1** - Latest Features ✨
+
+**🚀 Mobile-First Design Overhaul:**
+- **Bottom Navigation:** Implemented thumb-friendly bottom navigation for mobile devices
+- **Enhanced FAB:** Floating Action Button with smart positioning above bottom navigation
+- **Touch Optimization:** Improved touch interactions and gesture handling
+
+**✨ Beautiful Loading System:**
+- **6 Loader Variants:** Spinner, dots, pulse, skeleton, overlay, and inline loaders
+- **Global Loading State:** System-wide loading management with Zustand integration
+- **Smooth Animations:** GPU-accelerated CSS animations with modern transitions
+- **Smart Fallbacks:** Graceful handling of loading states and data hydration
+
+**🎨 UI/UX Improvements:**
+- **Modern Animations:** Fade-in effects, pulse animations, and micro-interactions
+- **Better Mobile Experience:** Responsive design optimized for mobile-first usage
+- **Enhanced Visual Feedback:** Loading states for all major operations (import, export, delete)
+
+**🔧 Technical Enhancements:**
+- **TypeScript Coverage:** Full type safety with improved developer experience
+- **Performance Optimization:** Efficient re-rendering and state management
+- **SSR-Safe Implementation:** Proper handling of localStorage and client-side hydration
+
+### **Coming Soon** 🚧
+- Multi-user support with authentication
+- Cloud storage integration for data backup
+- Advanced analytics and budgeting features
+- Recurring transaction automation
+- Enhanced search and filtering capabilities
+

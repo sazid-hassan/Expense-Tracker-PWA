@@ -3,10 +3,17 @@ import { persist, PersistStorage } from 'zustand/middleware';
 import { Transaction, Category, AppSettings, Currency, Language } from '../types';
 import { v4 as uuidv4 } from 'uuid';
 
+interface LoadingState {
+  isLoading: boolean;
+  message?: string;
+  variant?: 'spinner' | 'dots' | 'pulse' | 'skeleton' | 'overlay' | 'inline';
+}
+
 interface StoreState {
   transactions: Transaction[];
   categories: Category[];
   settings: AppSettings;
+  loading: LoadingState;
   addTransaction: (transaction: Transaction) => void;
   updateTransaction: (transaction: Transaction) => void;
   deleteTransaction: (id: string) => void;
@@ -16,6 +23,8 @@ interface StoreState {
   updateSettings: (settings: AppSettings) => void;
   importData: (data: { transactions: Transaction[], categories: Category[], settings: AppSettings }) => void;
   clearAllData: () => void;
+  setLoading: (loading: Partial<LoadingState>) => void;
+  hideLoading: () => void;
 }
 
 const customStorage: PersistStorage<StoreState> = {
@@ -78,6 +87,9 @@ export const useStore = create<StoreState>()(
         userName: 'User',
         language: Language.EN,
       },
+      loading: {
+        isLoading: false,
+      },
       addTransaction: (transaction) =>
         set((state) => ({
           transactions: [...state.transactions, transaction],
@@ -111,6 +123,14 @@ export const useStore = create<StoreState>()(
       updateSettings: (settings) => set({ settings }),
       importData: (data) => set({ transactions: data.transactions, categories: data.categories, settings: data.settings }),
       clearAllData: () => set({ transactions: [], categories: [] }),
+      setLoading: (loading) => 
+        set((state) => ({
+          loading: { ...state.loading, isLoading: true, ...loading },
+        })),
+      hideLoading: () => 
+        set((state) => ({
+          loading: { ...state.loading, isLoading: false },
+        })),
     }),
     {
       name: 'expense-tracker-storage', // unique name for localStorage key

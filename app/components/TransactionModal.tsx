@@ -18,6 +18,7 @@ import {
 import { useTranslation } from '../hooks/useTranslation';
 import { Transaction, TransactionType, Category } from '../types';
 import { useStore } from '../store/useStore';
+import { InlineLoader } from './Loader';
 
 interface ModalTransactionState {
   id?: string;
@@ -56,10 +57,30 @@ export default function TransactionModal({ open, onClose, transaction: initialTr
           category: categories[0],
         });
       } else {
-        setTransaction(null);
+        // Fallback when categories haven't loaded yet
+        setTransaction({
+          date: new Date().toISOString().split('T')[0],
+          amount: '0',
+          type: 'expense',
+          category: null,
+        });
       }
     }
   }, [open, initialTransaction, categories]);
+
+  // Auto-select first category when categories load and no category is selected
+  useEffect(() => {
+    if (transaction && !transaction.category && categories.length > 0) {
+      setTransaction(prev => {
+        if (!prev) return null;
+        return {
+          ...prev,
+          category: categories[0],
+          type: categories[0].type,
+        };
+      });
+    }
+  }, [categories, transaction]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -113,7 +134,11 @@ export default function TransactionModal({ open, onClose, transaction: initialTr
       }
       onClose();
     } else {
+      if (categories.length === 0) {
+        showSnackbar('Please wait for categories to load', 'info');
+      } else {
         showSnackbar(t.please_select_category_for_transaction, 'error');
+      }
     }
   };
 
@@ -171,6 +196,11 @@ export default function TransactionModal({ open, onClose, transaction: initialTr
               onChange={handleSelectChange}
               label={t.category}
             >
+              {categories.length === 0 && (
+                <MenuItem value="" disabled>
+                  <InlineLoader message="Loading categories..." size="small" />
+                </MenuItem>
+              )}
               {categories.map(category => (
                 <MenuItem key={category.id} value={category.id}>{category.name}</MenuItem>
               ))}

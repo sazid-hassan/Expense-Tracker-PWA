@@ -11,6 +11,7 @@ import {
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 import { useTranslation } from '../hooks/useTranslation';
+import { SkeletonLoader } from '../components/Loader';
 
 export default function HomePage() {
   const { transactions, settings } = useStore();
@@ -99,7 +100,11 @@ export default function HomePage() {
   }));
 
   if (loading) {
-    return <Typography>Loading translations...</Typography>;
+    return (
+      <Box sx={{ pt: 1 }}>
+        <SkeletonLoader />
+      </Box>
+    );
   }
 
   return (

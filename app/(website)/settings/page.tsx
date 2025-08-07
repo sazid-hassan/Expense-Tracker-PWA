@@ -25,7 +25,7 @@ import Alert from '@mui/material/Alert';
 import { useTranslation } from '../../hooks/useTranslation';
 
 export default function SettingsPage() {
-  const { settings, updateSettings, transactions, categories, importData, clearAllData } = useStore();
+  const { settings, updateSettings, transactions, categories, importData, clearAllData, setLoading, hideLoading } = useStore();
   const [currentSettings, setCurrentSettings] = useState<AppSettings>({
     ...settings,
     language: settings.language || Language.EN, // Ensure language is always defined
@@ -55,10 +55,15 @@ export default function SettingsPage() {
 
   const handleDeleteAllData = () => {
     if (deleteConfirmationChecked) {
-      clearAllData();
-      showSnackbar(t.all_data_deleted_successfully, 'success');
-      setIsDeleteModalOpen(false);
-      setDeleteConfirmationChecked(false);
+      setLoading({ message: t.deleting, variant: 'pulse' });
+      
+      setTimeout(() => {
+        clearAllData();
+        hideLoading();
+        showSnackbar(t.all_data_deleted_successfully, 'success');
+        setIsDeleteModalOpen(false);
+        setDeleteConfirmationChecked(false);
+      }, 1500);
     } else {
       showSnackbar(t.please_confirm_data_deletion, 'error');
     }
@@ -80,26 +85,39 @@ export default function SettingsPage() {
   };
 
   const handleExport = () => {
-    const data = JSON.stringify({ transactions, categories, settings });
-    const blob = new Blob([data], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'expense-tracker-data.json';
-    a.click();
-    URL.revokeObjectURL(url);
+    setLoading({ message: t.exporting, variant: 'pulse' });
+    
+    setTimeout(() => {
+      const data = JSON.stringify({ transactions, categories, settings });
+      const blob = new Blob([data], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'expense-tracker-data.json';
+      a.click();
+      URL.revokeObjectURL(url);
+      hideLoading();
+      showSnackbar('Data exported successfully!', 'success');
+    }, 500);
   };
 
   const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      setLoading({ message: t.importing, variant: 'dots' });
+      
       const reader = new FileReader();
       reader.onload = (event) => {
         try {
           const data = JSON.parse(event.target?.result as string);
-          importData(data);
-          showSnackbar(t.data_imported_successfully, 'success');
+          
+          setTimeout(() => {
+            importData(data);
+            hideLoading();
+            showSnackbar(t.data_imported_successfully, 'success');
+          }, 1000);
         } catch (error) {
+          hideLoading();
           showSnackbar(t.failed_to_import_data, 'error');
           console.error('Failed to import data:', error);
         }

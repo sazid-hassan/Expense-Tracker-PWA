@@ -23,19 +23,21 @@ const loadTranslations = async (lang: Language) => {
 };
 
 export const useTranslation = () => {
-  const { settings } = useStore();
+  const { settings, setLoading, hideLoading } = useStore();
   const [t, setT] = useState<Record<string, string>>({});
-  const [loading, setLoading] = useState(true);
+  const [loading, setLocalLoading] = useState(true);
 
   useEffect(() => {
     if (settings.language) {
-      setLoading(true);
+      setLocalLoading(true);
+      setLoading({ message: 'Loading translations...', variant: 'dots' });
       loadTranslations(settings.language).then(translations => {
         setT(translations);
-        setLoading(false);
+        setLocalLoading(false);
+        hideLoading();
       });
     }
-  }, [settings.language]);
+  }, [settings.language, setLoading, hideLoading]);
 
   return { t, loading };
 };

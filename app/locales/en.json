@@ -78,5 +78,16 @@
   "this_month_income": "This Month Income",
   "this_month_expenses": "This Month Expenses",
   "this_month_saving": "This Month Saving",
-  "this_year_saving": "This Year Saving"
+  "this_year_saving": "This Year Saving",
+  "loading": "Loading...",
+  "loading_data": "Loading data...",
+  "loading_transactions": "Loading transactions...",
+  "loading_categories": "Loading categories...",
+  "loading_settings": "Loading settings...",
+  "processing": "Processing...",
+  "saving": "Saving...",
+  "deleting": "Deleting...",
+  "importing": "Importing data...",
+  "exporting": "Exporting data...",
+  "please_wait": "Please wait..."
 }

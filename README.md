@@ -93,7 +93,7 @@ Follow these steps to set up and run the project locally.
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/your-username/expense-tracker.git
+    git clone https://github.com/sazid-hassan/expense-tracker.git
     cd expense-tracker
     ```
 
@@ -305,4 +305,5 @@ npm run dev
 - Advanced analytics and budgeting features
 - Recurring transaction automation
 - Enhanced search and filtering capabilities
+
 

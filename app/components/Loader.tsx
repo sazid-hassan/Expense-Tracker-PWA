@@ -29,15 +29,6 @@ const fadeInAnimation = keyframes`
   }
 `;
 
-const spinAnimation = keyframes`
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-`;
-
 const dotAnimation = keyframes`
   0%, 80%, 100% {
     transform: scale(0);
@@ -99,7 +90,9 @@ export default function Loader({
             width: spinnerSize * 0.2,
             height: spinnerSize * 0.2,
             borderRadius: '50%',
-            backgroundColor: theme.palette[color].main,
+            backgroundColor: color === 'inherit' 
+              ? 'currentColor' 
+              : theme.palette[color].main,
             animation: `${dotAnimation} 1.4s ease-in-out infinite both`,
             animationDelay: `${index * 0.16}s`,
           }}
@@ -114,7 +107,9 @@ export default function Loader({
         width: spinnerSize,
         height: spinnerSize,
         borderRadius: '50%',
-        border: `4px solid ${theme.palette[color].main}`,
+        border: `4px solid ${color === 'inherit' 
+          ? 'currentColor' 
+          : theme.palette[color].main}`,
         animation: `${pulseAnimation} 2s ease-in-out infinite`,
       }}
     />

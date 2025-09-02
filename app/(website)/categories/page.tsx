@@ -25,12 +25,56 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { useTranslation } from '../../hooks/useTranslation';
 
+// iOS-style button configurations
+const iosButtonStyle = {
+  borderRadius: 3,
+  textTransform: 'none' as const,
+  fontWeight: 600,
+  transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%)',
+  backdropFilter: 'blur(20px)',
+  border: '1px solid rgba(255, 255, 255, 0.3)',
+  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.1)',
+  color: 'rgba(0, 0, 0, 0.8)',
+  '&:hover': {
+    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.2) 100%)',
+    boxShadow: '0 12px 40px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1)',
+    transform: 'translateY(-1px)',
+  },
+  '&:active': {
+    transform: 'translateY(0px)',
+    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.1)',
+  },
+};
+
+const iosButtonStyleSmall = {
+  ...iosButtonStyle,
+  py: 0.5,
+  px: 1.5,
+  fontSize: '14px',
+  minWidth: 'auto',
+};
+
+const iosButtonStyleError = {
+  ...iosButtonStyle,
+  background: 'linear-gradient(135deg, rgba(255, 59, 48, 0.3) 0%, rgba(255, 59, 48, 0.1) 100%)',
+  border: '1px solid rgba(255, 59, 48, 0.3)',
+  color: 'rgba(255, 59, 48, 0.9)',
+  '&:hover': {
+    background: 'linear-gradient(135deg, rgba(255, 59, 48, 0.4) 0%, rgba(255, 59, 48, 0.2) 100%)',
+    boxShadow: '0 12px 40px rgba(255, 59, 48, 0.15), 0 4px 12px rgba(255, 59, 48, 0.1)',
+    transform: 'translateY(-1px)',
+  },
+};
+
 
 export default function CategoriesPage() {
   const { categories, addCategory, updateCategory, deleteCategory } = useStore();
   const [newCategory, setNewCategory] = useState<Omit<Category, 'id'> | null>(null);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(null);
   const { t, loading } = useTranslation();
 
   const handleOpenAddModal = () => {
@@ -117,10 +161,22 @@ export default function CategoriesPage() {
     }
   };
 
-  const handleDeleteCategory = (id: string) => {
-    if (window.confirm(t.are_you_sure_delete_category)) {
-      deleteCategory(id);
+  const handleDeleteClick = (category: Category) => {
+    setCategoryToDelete(category);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setCategoryToDelete(null);
+  };
+
+  const handleConfirmDelete = () => {
+    if (categoryToDelete) {
+      deleteCategory(categoryToDelete.id);
       showSnackbar(t.category_deleted_successfully, 'success');
+      setIsDeleteModalOpen(false);
+      setCategoryToDelete(null);
     }
   };
 
@@ -142,8 +198,18 @@ export default function CategoriesPage() {
         {t.categories}
       </Typography>
 
-      <Button variant="contained" onClick={handleOpenAddModal} sx={{ mb: 2 }}>
-        {t.add_new_category}
+      <Button 
+        variant="contained" 
+        onClick={handleOpenAddModal} 
+        sx={{ 
+          ...iosButtonStyle,
+          mb: 2,
+          fontSize: '16px',
+          py: 1.5,
+          px: 3,
+        }}
+      >
+        + {t.add_new_category}
       </Button>
 
       <Paper elevation={3} sx={{ mb: 4 }}>
@@ -154,10 +220,20 @@ export default function CategoriesPage() {
               divider
               secondaryAction={
                 <Box>
-                  <Button variant="outlined" size="small" onClick={() => handleEditClick(category)} sx={{ mr: 1 }}>
+                  <Button 
+                    variant="contained" 
+                    size="small" 
+                    onClick={() => handleEditClick(category)} 
+                    sx={{ ...iosButtonStyleSmall, mr: 1 }}
+                  >
                     ✏️
                   </Button>
-                  <Button variant="outlined" size="small" color="error" onClick={() => handleDeleteCategory(category.id)}>
+                  <Button 
+                    variant="contained" 
+                    size="small" 
+                    onClick={() => handleDeleteClick(category)}
+                    sx={iosButtonStyleError}
+                  >
                     🗑️
                   </Button>
                 </Box>
@@ -191,6 +267,12 @@ export default function CategoriesPage() {
         onClose={handleCloseAddModal}
         aria-labelledby="add-edit-category-modal-title"
         aria-describedby="add-edit-category-modal-description"
+        BackdropProps={{
+          sx: {
+            backgroundColor: 'rgba(0, 0, 0, 0.2)',
+            backdropFilter: 'blur(4px)',
+          }
+        }}
       >
         <Box sx={{
           position: 'absolute',
@@ -198,10 +280,24 @@ export default function CategoriesPage() {
           left: '50%',
           transform: 'translate(-50%, -50%)',
           width: { xs: '90%', sm: 400 },
-          bgcolor: 'background.paper',
-          border: '2px solid #000',
-          boxShadow: 24,
+          backgroundColor: 'rgba(255, 255, 255, 0.2)',
+          backdropFilter: 'blur(20px)',
+          border: '1px solid rgba(255, 255, 255, 0.3)',
+          boxShadow: '0 16px 48px rgba(0, 0, 0, 0.4)',
+          borderRadius: 2,
           p: 4,
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%)',
+            pointerEvents: 'none',
+            zIndex: -1,
+            borderRadius: 'inherit',
+          },
         }}>
           <Typography id="add-edit-category-modal-title" variant="h6" component="h2" gutterBottom>
             {editingCategory ? t.edit_category : t.add_new_category}
@@ -239,18 +335,100 @@ export default function CategoriesPage() {
             </FormControl>
             {editingCategory ? (
               <Box sx={{ display: 'flex', gap: 2 }}>
-                <Button variant="contained" onClick={handleUpdateCategory}>
+                <Button 
+                  variant="contained" 
+                  onClick={handleUpdateCategory}
+                  sx={iosButtonStyle}
+                >
                   {t.save_changes}
                 </Button>
-                <Button variant="outlined" onClick={handleCloseAddModal}>
+                <Button 
+                  variant="outlined" 
+                  onClick={handleCloseAddModal}
+                  sx={iosButtonStyle}
+                >
                   {t.cancel}
                 </Button>
               </Box>
             ) : (
-              <Button fullWidth variant="contained" onClick={handleAddCategory}>
-              {t.add_category}
-            </Button>
+              <Button 
+                fullWidth 
+                variant="contained" 
+                onClick={handleAddCategory}
+                sx={iosButtonStyle}
+              >
+                {t.add_new_category}
+              </Button>
             )}
+          </Box>
+        </Box>
+      </Modal>
+
+      {/* Delete Confirmation Modal */}
+      <Modal
+        open={isDeleteModalOpen}
+        onClose={handleCloseDeleteModal}
+        aria-labelledby="delete-category-modal-title"
+        aria-describedby="delete-category-modal-description"
+        BackdropProps={{
+          sx: {
+            backgroundColor: 'rgba(0, 0, 0, 0.2)',
+            backdropFilter: 'blur(4px)',
+          }
+        }}
+      >
+        <Box sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: { xs: '90%', sm: 400 },
+          backgroundColor: 'rgba(255, 255, 255, 0.2)',
+          backdropFilter: 'blur(20px)',
+          border: '1px solid rgba(255, 255, 255, 0.3)',
+          boxShadow: '0 16px 48px rgba(0, 0, 0, 0.4)',
+          borderRadius: 2,
+          p: 4,
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%)',
+            pointerEvents: 'none',
+            zIndex: -1,
+            borderRadius: 'inherit',
+          },
+        }}>
+          <Typography id="delete-category-modal-title" variant="h6" component="h2" gutterBottom>
+            {t.delete_category}
+          </Typography>
+          <Typography id="delete-category-modal-description" sx={{ mb: 2 }}>
+            {t.are_you_sure_delete_category}
+          </Typography>
+          {categoryToDelete && (
+            <Typography variant="body2" sx={{ mb: 3, p: 2, bgcolor: 'rgba(255, 255, 255, 0.1)', borderRadius: 1 }}>
+              <strong>{categoryToDelete.name}</strong><br />
+              {categoryToDelete.description}
+            </Typography>
+          )}
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+            <Button 
+              variant="outlined" 
+              onClick={handleCloseDeleteModal}
+              sx={iosButtonStyle}
+            >
+              {t.cancel}
+            </Button>
+            <Button 
+              variant="contained" 
+              onClick={handleConfirmDelete}
+              sx={iosButtonStyleError}
+            >
+              {t.delete}
+            </Button>
           </Box>
         </Box>
       </Modal>

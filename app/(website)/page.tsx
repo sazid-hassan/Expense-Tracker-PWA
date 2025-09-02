@@ -116,32 +116,201 @@ export default function HomePage() {
 
 
         <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, mb: 4 }}>
-          <Paper elevation={3} sx={{ p: 2, bgcolor: 'success.light', color: 'success.contrastText' }}>
+          <Paper 
+            elevation={0}
+            sx={{ 
+              p: 2, 
+              bgcolor: 'rgba(76, 175, 80, 0.15)',
+              backdropFilter: 'blur(20px)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+              color: 'success.main',
+              fontWeight: 'bold',
+              position: 'relative',
+              overflow: 'hidden',
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)',
+                pointerEvents: 'none',
+                zIndex: -1,
+              },
+            }}
+          >
             <Typography variant="h6">{t.total_income}</Typography>
             <Typography variant="h5">{getCurrencySymbol(settings.currency)} {totalIncome.toFixed(2)}</Typography>
           </Paper>
-          <Paper elevation={3} sx={{ p: 2, bgcolor: 'error.dark', color: 'error.contrastText' }}>
+          <Paper 
+            elevation={0}
+            sx={{ 
+              p: 2, 
+              bgcolor: 'rgba(211, 47, 47, 0.15)',
+              backdropFilter: 'blur(20px)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+              color: 'error.main',
+              fontWeight: 'bold',
+              position: 'relative',
+              overflow: 'hidden',
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)',
+                pointerEvents: 'none',
+                zIndex: -1,
+              },
+            }}
+          >
             <Typography variant="h6">{t.total_expenses}</Typography>
             <Typography variant="h5">{getCurrencySymbol(settings.currency)} {totalExpenses.toFixed(2)}</Typography>
           </Paper>
-          <Paper elevation={3} sx={{ p: 2, bgcolor: 'info.light', color: 'info.contrastText' }}>
+          <Paper 
+            elevation={0}
+            sx={{ 
+              p: 2, 
+              bgcolor: 'rgba(2, 136, 209, 0.15)',
+              backdropFilter: 'blur(20px)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+              color: 'info.main',
+              fontWeight: 'bold',
+              position: 'relative',
+              overflow: 'hidden',
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)',
+                pointerEvents: 'none',
+                zIndex: -1,
+              },
+            }}
+          >
             <Typography variant="h6">{t.this_month_income}</Typography>
             <Typography variant="h5">{getCurrencySymbol(settings.currency)} {thisMonthIncome.toFixed(2)}</Typography>
           </Paper>
-          <Paper elevation={3} sx={{ p: 2, bgcolor: 'error.light', color: 'error.contrastText' }}>
+          <Paper 
+            elevation={0}
+            sx={{ 
+              p: 2, 
+              bgcolor: 'rgba(239, 83, 80, 0.15)',
+              backdropFilter: 'blur(20px)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+              color: 'error.main',
+              fontWeight: 'bold',
+              position: 'relative',
+              overflow: 'hidden',
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)',
+                pointerEvents: 'none',
+                zIndex: -1,
+              },
+            }}
+          >
             <Typography variant="h6">{t.this_month_expenses}</Typography>
             <Typography variant="h5">{getCurrencySymbol(settings.currency)} {thisMonthExpenses.toFixed(2)}</Typography>
           </Paper>
-          <Paper elevation={3} sx={{ p: 2, bgcolor: 'success.light', color: 'info.contrastText' }}>
+          <Paper 
+            elevation={0}
+            sx={{ 
+              p: 2, 
+              bgcolor: 'rgba(129, 199, 132, 0.15)',
+              backdropFilter: 'blur(20px)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+              color: 'success.main',
+              fontWeight: 'bold',
+              position: 'relative',
+              overflow: 'hidden',
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)',
+                pointerEvents: 'none',
+                zIndex: -1,
+              },
+            }}
+          >
             <Typography variant="h6">{t.this_month_saving}</Typography>
             <Typography variant="h5">{getCurrencySymbol(settings.currency)} {thisMonthSaving.toFixed(2)}</Typography>
           </Paper>
-          <Paper elevation={3} sx={{ p: 2, bgcolor: 'success.dark', color: 'info.contrastText' }}>
+          <Paper 
+            elevation={0}
+            sx={{ 
+              p: 2, 
+              bgcolor: 'rgba(56, 142, 60, 0.15)',
+              backdropFilter: 'blur(20px)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+              color: 'success.dark',
+              fontWeight: 'bold',
+              position: 'relative',
+              overflow: 'hidden',
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)',
+                pointerEvents: 'none',
+                zIndex: -1,
+              },
+            }}
+          >
             <Typography variant="h6">{t.this_year_saving}</Typography>
             <Typography variant="h5">{getCurrencySymbol(settings.currency)} {thisYearSaving.toFixed(2)}</Typography>
           </Paper>
 
-          <Paper elevation={3} sx={{ p: 2, bgcolor: 'info.light', color: 'info.contrastText', mb: 4 }}>
+          <Paper 
+            elevation={0}
+            sx={{ 
+              p: 2, 
+              bgcolor: 'rgba(79, 195, 247, 0.15)',
+              backdropFilter: 'blur(20px)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+              color: 'info.main',
+              fontWeight: 'bold',
+              mb: 4,
+              position: 'relative',
+              overflow: 'hidden',
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)',
+                pointerEvents: 'none',
+                zIndex: -1,
+              },
+            }}
+          >
             <Typography variant="h6">Balance</Typography>
             <Typography variant="h5">{getCurrencySymbol(settings.currency)} {(totalIncome - totalExpenses).toFixed(2)}</Typography>
           </Paper>
@@ -150,7 +319,32 @@ export default function HomePage() {
         <Typography variant="h5" component="h2" gutterBottom sx={{ mt: 4 }}>
           Yearly Overview
         </Typography>
-        <ResponsiveContainer width="100%" height={300}>
+        <Paper 
+          elevation={0}
+          sx={{
+            p: 3,
+            mb: 4,
+            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+            backdropFilter: 'blur(20px)',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+            borderRadius: 2,
+            position: 'relative',
+            overflow: 'hidden',
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)',
+              pointerEvents: 'none',
+              zIndex: -1,
+            },
+          }}
+        >
+          <ResponsiveContainer width="100%" height={300}>
           <LineChart
             data={yearlyData}
             margin={{
@@ -169,11 +363,37 @@ export default function HomePage() {
             <Line type="monotone" dataKey="expense" stroke="#8884d8" />
           </LineChart>
         </ResponsiveContainer>
+        </Paper>
 
         <Typography variant="h5" component="h2" gutterBottom sx={{ mt: 4 }}>
           Monthly Overview
         </Typography>
-        <ResponsiveContainer width="100%" height={300}>
+        <Paper 
+          elevation={0}
+          sx={{
+            p: 3,
+            mb: 4,
+            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+            backdropFilter: 'blur(20px)',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+            borderRadius: 2,
+            position: 'relative',
+            overflow: 'hidden',
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)',
+              pointerEvents: 'none',
+              zIndex: -1,
+            },
+          }}
+        >
+          <ResponsiveContainer width="100%" height={300}>
           <LineChart
             data={monthlyData}
             margin={{
@@ -192,28 +412,55 @@ export default function HomePage() {
             <Line type="monotone" dataKey="expense" stroke="#8884d8" />
           </LineChart>
         </ResponsiveContainer>
+        </Paper>
 
         <Typography variant="h5" component="h2" gutterBottom sx={{ mt: 4 }}>
           Category Spending
         </Typography>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart
-            data={categoryChartData}
-            margin={{
-              top: 5,
-              right: 30,
-              left: 20,
-              bottom: 5,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip formatter={(value: number) => `${getCurrencySymbol(settings.currency)} ${value.toFixed(2)}`} />
-            <Legend />
-            <Bar dataKey="value" fill="#8884d8" />
-          </BarChart>
-        </ResponsiveContainer>
+        <Paper 
+          elevation={0}
+          sx={{
+            p: 3,
+            mb: 4,
+            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+            backdropFilter: 'blur(20px)',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+            borderRadius: 2,
+            position: 'relative',
+            overflow: 'hidden',
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)',
+              pointerEvents: 'none',
+              zIndex: -1,
+            },
+          }}
+        >
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart
+              data={categoryChartData}
+              margin={{
+                top: 5,
+                right: 30,
+                left: 20,
+                bottom: 5,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip formatter={(value: number) => `${getCurrencySymbol(settings.currency)} ${value.toFixed(2)}`} />
+              <Legend />
+              <Bar dataKey="value" fill="#8884d8" />
+            </BarChart>
+          </ResponsiveContainer>
+        </Paper>
       </Box>
 
     </>

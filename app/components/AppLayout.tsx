@@ -4,8 +4,6 @@ import Link from 'next/link';
 import {
   AppBar,
   Toolbar,
-  Button,
-  Typography,
   Container,
   useMediaQuery,
   useTheme,
@@ -27,6 +25,7 @@ import { usePathname } from 'next/navigation';
 import { useTranslation } from '../hooks/useTranslation';
 import TransactionModal from './TransactionModal';
 import GlobalLoader from './GlobalLoader';
+import Sidebar from './Sidebar';
 import { Transaction } from '../types';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
@@ -83,27 +82,76 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" component={Link} href="/" sx={{ flexGrow: 1, textDecoration: 'none', color: 'inherit' }}>
-            {t.expense_tracker}
-          </Typography>
-          {!isMobile && (
-            <Box>
-              <Button color="inherit" component={Link} href="/categories">{t.categories}</Button>
-              <Button color="inherit" component={Link} href="/transactions">{t.transactions}</Button>
-              <Button color="inherit" component={Link} href="/settings">{t.settings}</Button>
-            </Box>
-          )}
-        </Toolbar>
-      </AppBar>
-      <Container sx={{ pb: isMobile ? '80px' : 0 }}>
-        {children}
-      </Container>
+      <Box 
+        sx={{ 
+          display: 'flex',
+          minHeight: '100vh',
+          backgroundImage: isMobile 
+            ? 'url(/paper-mobile.jpg)' 
+            : 'url(/paper-desktop.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          backgroundAttachment: 'fixed',
+        }}
+      >
+        {/* Desktop Sidebar */}
+        {!isMobile && <Sidebar />}
+        
+        {/* Main Content Area */}
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            minHeight: '100vh',
+          }}
+        >
+          {/* AppBar - only show title on desktop, full bar on mobile */}
+          <AppBar 
+            position="static"
+            sx={{
+              backgroundColor: 'rgba(25, 118, 210, 0.1)',
+              backdropFilter: 'blur(20px)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+            }}
+          >
+            <Toolbar>
+             
+            </Toolbar>
+          </AppBar>
+          
+          {/* Content Container */}
+          <Container 
+            sx={{ 
+              pb: isMobile ? '80px' : 2,
+              pt: 2,
+              flexGrow: 1,
+            }}
+          >
+            {children}
+          </Container>
+        </Box>
+      </Box>
       
       {/* Bottom Navigation for Mobile */}
       {isMobile && (
-        <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 1000 }} elevation={3}>
+        <Paper 
+          sx={{ 
+            position: 'fixed', 
+            bottom: 0, 
+            left: 0, 
+            right: 0, 
+            zIndex: 1000,
+            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+            backdropFilter: 'blur(20px)',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+          }} 
+          elevation={0}
+        >
           <BottomNavigation
             value={bottomNavValue}
             onChange={(event, newValue) => {
@@ -149,9 +197,20 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           zIndex: 1001,
           touchAction: 'manipulation',
           pointerEvents: 'auto',
-          backgroundColor: 'primary.main',
+          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%)',
+          backdropFilter: 'blur(20px)',
+          border: '1px solid rgba(255, 255, 255, 0.3)',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.1)',
+          color: 'rgba(0, 0, 0, 0.8)',
+          transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
           '&:hover': {
-            backgroundColor: 'primary.dark',
+            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.2) 100%)',
+            boxShadow: '0 12px 40px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1)',
+            transform: 'translateY(-2px)',
+          },
+          '&:active': {
+            transform: 'translateY(0px)',
+            boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.1)',
           },
         }}
         onClick={handleModalOpen}

@@ -31,13 +31,70 @@ import { Transaction } from '../../types';
 
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useTranslation } from '../../hooks/useTranslation';
 import TransactionModal from '../../components/TransactionModal';
+import TransactionDetailsModal from '../../components/TransactionDetailsModal';
+
+// iOS-style button configurations
+const iosButtonStyle = {
+  borderRadius: 3,
+  textTransform: 'none' as const,
+  fontWeight: 600,
+  transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%)',
+  backdropFilter: 'blur(20px)',
+  border: '1px solid rgba(255, 255, 255, 0.3)',
+  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.1)',
+  color: 'rgba(0, 0, 0, 0.8)',
+  '&:hover': {
+    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.2) 100%)',
+    boxShadow: '0 12px 40px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1)',
+    transform: 'translateY(-1px)',
+  },
+  '&:active': {
+    transform: 'translateY(0px)',
+    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.1)',
+  },
+};
+
+const iosButtonStyleSmall = {
+  ...iosButtonStyle,
+  py: 0.5,
+  px: 1.5,
+  fontSize: '14px',
+  minWidth: 'auto',
+};
+
+const iosButtonStyleError = {
+  ...iosButtonStyle,
+  background: 'linear-gradient(135deg, rgba(255, 59, 48, 0.3) 0%, rgba(255, 59, 48, 0.1) 100%)',
+  border: '1px solid rgba(255, 59, 48, 0.3)',
+  color: 'rgba(255, 59, 48, 0.9)',
+  '&:hover': {
+    background: 'linear-gradient(135deg, rgba(255, 59, 48, 0.4) 0%, rgba(255, 59, 48, 0.2) 100%)',
+    boxShadow: '0 12px 40px rgba(255, 59, 48, 0.15), 0 4px 12px rgba(255, 59, 48, 0.1)',
+    transform: 'translateY(-1px)',
+  },
+};
+
+const iosButtonStyleSecondary = {
+  ...iosButtonStyle,
+  background: 'linear-gradient(135deg, rgba(0, 122, 255, 0.3) 0%, rgba(0, 122, 255, 0.1) 100%)',
+  border: '1px solid rgba(0, 122, 255, 0.3)',
+  color: 'rgba(0, 122, 255, 0.9)',
+  '&:hover': {
+    background: 'linear-gradient(135deg, rgba(0, 122, 255, 0.4) 0%, rgba(0, 122, 255, 0.2) 100%)',
+    boxShadow: '0 12px 40px rgba(0, 122, 255, 0.15), 0 4px 12px rgba(0, 122, 255, 0.1)',
+    transform: 'translateY(-1px)',
+  },
+};
 
 export default function TransactionsPage() {
   const { transactions, settings,  deleteTransaction } = useStore();
   const [transactionToEdit, setTransactionToEdit] = useState<Transaction | null>(null);
   const [transactionToDelete, setTransactionToDelete] = useState<Transaction | null>(null);
+  const [transactionToView, setTransactionToView] = useState<Transaction | null>(null);
   const [filterStartDate, setFilterStartDate] = useState<string>('');
   const [filterEndDate, setFilterEndDate] = useState<string>('');
   const [filterMonth, setFilterMonth] = useState<string>('');
@@ -45,6 +102,7 @@ export default function TransactionsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
 
@@ -66,6 +124,16 @@ export default function TransactionsPage() {
   const handleCloseDeleteModal = () => {
     setTransactionToDelete(null);
     setIsDeleteModalOpen(false);
+  };
+
+  const handleOpenViewModal = (transaction: Transaction) => {
+    setTransactionToView(transaction);
+    setIsViewModalOpen(true);
+  };
+
+  const handleCloseViewModal = () => {
+    setIsViewModalOpen(false);
+    setTransactionToView(null);
   };
 
   const handleOpenFilterModal = () => setIsFilterModalOpen(true);
@@ -174,11 +242,19 @@ export default function TransactionsPage() {
       </Typography>
 
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, gap: 2 }}>
-        <Button variant="outlined" color="secondary" onClick={handleOpenFilterModal}>
+        <Button 
+          variant="contained" 
+          onClick={handleOpenFilterModal}
+          sx={iosButtonStyleSecondary}
+        >
           {t.filter_transactions}
         </Button>
-        <Button variant="contained" onClick={() => handleOpenModal()}>
-          {t.add_new_transaction}
+        <Button 
+          variant="contained" 
+          onClick={() => handleOpenModal()}
+          sx={iosButtonStyle}
+        >
+          + {t.add_new_transaction}
         </Button>
       </Box>
 
@@ -187,17 +263,37 @@ export default function TransactionsPage() {
         onClose={handleCloseFilterModal}
         aria-labelledby="filter-modal-title"
         aria-describedby="filter-modal-description"
+        BackdropProps={{
+          sx: {
+            backgroundColor: 'rgba(0, 0, 0, 0.2)',
+            backdropFilter: 'blur(4px)',
+          }
+        }}
       >
         <Box sx={{
-          position: 'absolute' ,
+          position: 'absolute',
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
           width: isMobile ? '90%' : 400,
-          bgcolor: 'background.paper',
-          border: '2px solid #000',
-          boxShadow: 24,
+          backgroundColor: 'rgba(255, 255, 255, 0.2)',
+          backdropFilter: 'blur(20px)',
+          border: '1px solid rgba(255, 255, 255, 0.3)',
+          boxShadow: '0 16px 48px rgba(0, 0, 0, 0.4)',
+          borderRadius: 2,
           p: 4,
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%)',
+            pointerEvents: 'none',
+            zIndex: -1,
+            borderRadius: 'inherit',
+          },
         }}>
           <Typography id="filter-modal-title" variant="h6" component="h2" gutterBottom>
             {t.filter_transactions}
@@ -245,15 +341,23 @@ export default function TransactionsPage() {
                 ))}
             </Select>
             </FormControl>
-            <Button variant="outlined" onClick={() => {
-              setFilterStartDate('');
-              setFilterEndDate('');
-              setFilterMonth('');
-              setFilterYear('');
-            }}>
+            <Button 
+              variant="outlined" 
+              onClick={() => {
+                setFilterStartDate('');
+                setFilterEndDate('');
+                setFilterMonth('');
+                setFilterYear('');
+              }}
+              sx={iosButtonStyleSecondary}
+            >
               {t.clear_filters}
             </Button>
-            <Button variant="contained" onClick={handleCloseFilterModal}>
+            <Button 
+              variant="contained" 
+              onClick={handleCloseFilterModal}
+              sx={iosButtonStyle}
+            >
               {t.apply_filters}
             </Button>
           </Box>
@@ -283,9 +387,37 @@ export default function TransactionsPage() {
                 <Typography sx={{ textTransform: 'capitalize' }}>
                   {t.type}: {transaction.type}
                 </Typography>
+                {transaction.notes && (
+                  <Typography sx={{ mt: 1, fontStyle: 'italic', color: 'text.secondary' }}>
+                    {t.notes}: {transaction.notes}
+                  </Typography>
+                )}
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, mt: 1 }}>
-                  <Button size="small" variant="outlined" onClick={() => handleOpenModal(transaction)}>{t.edit}</Button>
-                  <Button size="small" variant="outlined" color="error" onClick={() => handleOpenDeleteModal(transaction)}>{t.delete}</Button>
+                  <Button 
+                    size="small" 
+                    variant="contained" 
+                    startIcon={<VisibilityIcon />}
+                    onClick={() => handleOpenViewModal(transaction)}
+                    sx={{ ...iosButtonStyleSecondary, mr: 1 }}
+                  >
+                    {t.view}
+                  </Button>
+                  <Button 
+                    size="small" 
+                    variant="contained" 
+                    onClick={() => handleOpenModal(transaction)}
+                    sx={{ ...iosButtonStyleSmall, mr: 1 }}
+                  >
+                    {t.edit}
+                  </Button>
+                  <Button 
+                    size="small" 
+                    variant="contained" 
+                    onClick={() => handleOpenDeleteModal(transaction)}
+                    sx={iosButtonStyleError}
+                  >
+                    {t.delete}
+                  </Button>
                 </Box>
               </AccordionDetails>
             </Accordion>
@@ -301,6 +433,7 @@ export default function TransactionsPage() {
                   <TableCell>{t.category}</TableCell>
                   <TableCell align="right">{t.amount}</TableCell>
                   <TableCell>{t.type}</TableCell>
+                  <TableCell>{t.notes}</TableCell>
                   <TableCell>{t.actions}</TableCell>
                 </TableRow>
               </TableHead>
@@ -318,9 +451,35 @@ export default function TransactionsPage() {
                       {transaction.type === 'income' ? '+' : '-'} {getCurrencySymbol(settings.currency)} {transaction.amount.toFixed(2)}
                     </TableCell>
                     <TableCell sx={{ textTransform: 'capitalize' }}>{transaction.type}</TableCell>
+                    <TableCell sx={{ maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {transaction.notes || '-'}
+                    </TableCell>
                     <TableCell>
-                      <Button size="small" variant="outlined" onClick={() => handleOpenModal(transaction)}>{t.edit}</Button>
-                      <Button size="small" variant="outlined" color="error" onClick={() => handleOpenDeleteModal(transaction)} sx={{ ml: 1 }}>{t.delete}</Button>
+                      <Button 
+                        size="small" 
+                        variant="contained" 
+                        startIcon={<VisibilityIcon />}
+                        onClick={() => handleOpenViewModal(transaction)} 
+                        sx={{ ...iosButtonStyleSecondary, mr: 1 }}
+                      >
+                        {t.view}
+                      </Button>
+                      <Button 
+                        size="small" 
+                        variant="contained" 
+                        onClick={() => handleOpenModal(transaction)} 
+                        sx={{ ...iosButtonStyleSmall, mr: 1 }}
+                      >
+                        {t.edit}
+                      </Button>
+                      <Button 
+                        size="small" 
+                        variant="contained" 
+                        onClick={() => handleOpenDeleteModal(transaction)}
+                        sx={iosButtonStyleError}
+                      >
+                        {t.delete}
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -353,17 +512,37 @@ export default function TransactionsPage() {
         onClose={handleCloseDeleteModal}
         aria-labelledby="delete-transaction-modal-title"
         aria-describedby="delete-transaction-modal-description"
+        BackdropProps={{
+          sx: {
+            backgroundColor: 'rgba(0, 0, 0, 0.2)',
+            backdropFilter: 'blur(4px)',
+          }
+        }}
       >
         <Box sx={{
-          position: 'absolute' ,
+          position: 'absolute',
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
           width: isMobile ? '90%' : 400,
-          bgcolor: 'background.paper',
-          border: '2px solid #000',
-          boxShadow: 24,
+          backgroundColor: 'rgba(255, 255, 255, 0.2)',
+          backdropFilter: 'blur(20px)',
+          border: '1px solid rgba(255, 255, 255, 0.3)',
+          boxShadow: '0 16px 48px rgba(0, 0, 0, 0.4)',
+          borderRadius: 2,
           p: 4,
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%)',
+            pointerEvents: 'none',
+            zIndex: -1,
+            borderRadius: 'inherit',
+          },
         }}>
           <Typography id="delete-transaction-modal-title" variant="h6" component="h2" gutterBottom>
             {t.delete_transaction}
@@ -372,11 +551,30 @@ export default function TransactionsPage() {
             {t.are_you_sure_you_want_to_delete_this_transaction}
           </Typography>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
-            <Button variant="outlined" onClick={handleCloseDeleteModal}>{t.cancel}</Button>
-            <Button variant="contained" color="error" onClick={handleDeleteTransaction}>{t.delete}</Button>
+            <Button 
+              variant="outlined" 
+              onClick={handleCloseDeleteModal}
+              sx={iosButtonStyle}
+            >
+              {t.cancel}
+            </Button>
+            <Button 
+              variant="contained" 
+              onClick={handleDeleteTransaction}
+              sx={iosButtonStyleError}
+            >
+              {t.delete}
+            </Button>
           </Box>
         </Box>
       </Modal>
+
+      {/* Transaction Details Modal */}
+      <TransactionDetailsModal
+        open={isViewModalOpen}
+        onClose={handleCloseViewModal}
+        transaction={transactionToView}
+      />
     </Box>
     <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
       <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>

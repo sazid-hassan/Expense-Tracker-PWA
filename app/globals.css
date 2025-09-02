@@ -1,5 +1,37 @@
 @import "tailwindcss/preflight";
 @tailwind utilities;
-@tailwind utilities;
 
-/* You can add global styles for Material UI here if needed */
+/* Background Image Styles */
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* Enhanced Glass-morphism effects */
+.MuiPaper-root {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Enhance glass effect for specific colored papers */
+.MuiPaper-root[style*="background-color"] {
+  background-color: inherit !important;
+  opacity: 1;
+  backdrop-filter: blur(20px) !important;
+}
+
+/* Keep snackbars fully opaque for readability */
+.MuiSnackbar-root .MuiPaper-root {
+  background-color: inherit !important;
+  opacity: 1 !important;
+  backdrop-filter: none !important;
+  border: none !important;
+}
+
+/* Keep bottom navigation and app bar styling as defined in components */
+.MuiBottomNavigation-root,
+.MuiAppBar-root {
+  backdrop-filter: blur(10px) !important;
+}

@@ -13,6 +13,7 @@ export interface Transaction {
   amount: number;
   type: TransactionType;
   category: Category;
+  notes?: string;
 }
 
 export enum Currency {

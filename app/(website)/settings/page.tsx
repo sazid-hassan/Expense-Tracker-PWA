@@ -24,6 +24,52 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { useTranslation } from '../../hooks/useTranslation';
 
+// iOS-style button configurations
+const iosButtonStyle = {
+  borderRadius: 3,
+  textTransform: 'none' as const,
+  fontWeight: 600,
+  transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%)',
+  backdropFilter: 'blur(20px)',
+  border: '1px solid rgba(255, 255, 255, 0.3)',
+  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.1)',
+  color: 'rgba(0, 0, 0, 0.8)',
+  '&:hover': {
+    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.2) 100%)',
+    boxShadow: '0 12px 40px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1)',
+    transform: 'translateY(-1px)',
+  },
+  '&:active': {
+    transform: 'translateY(0px)',
+    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.1)',
+  },
+};
+
+const iosButtonStyleError = {
+  ...iosButtonStyle,
+  background: 'linear-gradient(135deg, rgba(255, 59, 48, 0.3) 0%, rgba(255, 59, 48, 0.1) 100%)',
+  border: '1px solid rgba(255, 59, 48, 0.3)',
+  color: 'rgba(255, 59, 48, 0.9)',
+  '&:hover': {
+    background: 'linear-gradient(135deg, rgba(255, 59, 48, 0.4) 0%, rgba(255, 59, 48, 0.2) 100%)',
+    boxShadow: '0 12px 40px rgba(255, 59, 48, 0.15), 0 4px 12px rgba(255, 59, 48, 0.1)',
+    transform: 'translateY(-1px)',
+  },
+};
+
+const iosButtonStyleSuccess = {
+  ...iosButtonStyle,
+  background: 'linear-gradient(135deg, rgba(52, 199, 89, 0.3) 0%, rgba(52, 199, 89, 0.1) 100%)',
+  border: '1px solid rgba(52, 199, 89, 0.3)',
+  color: 'rgba(52, 199, 89, 0.9)',
+  '&:hover': {
+    background: 'linear-gradient(135deg, rgba(52, 199, 89, 0.4) 0%, rgba(52, 199, 89, 0.2) 100%)',
+    boxShadow: '0 12px 40px rgba(52, 199, 89, 0.15), 0 4px 12px rgba(52, 199, 89, 0.1)',
+    transform: 'translateY(-1px)',
+  },
+};
+
 export default function SettingsPage() {
   const { settings, updateSettings, transactions, categories, importData, clearAllData, setLoading, hideLoading } = useStore();
   const [currentSettings, setCurrentSettings] = useState<AppSettings>({
@@ -184,7 +230,11 @@ export default function SettingsPage() {
             </Select>
           </FormControl>
         </Box>
-        <Button variant="contained" onClick={handleSave}>
+        <Button 
+          variant="contained" 
+          onClick={handleSave}
+          sx={iosButtonStyle}
+        >
           {t.save_settings}
         </Button>
       </Paper>
@@ -194,7 +244,11 @@ export default function SettingsPage() {
           {t.data_management}
         </Typography>
         <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-          <Button variant="contained" color="success" onClick={handleExport}>
+          <Button 
+            variant="contained" 
+            onClick={handleExport}
+            sx={iosButtonStyleSuccess}
+          >
             {t.export_data}
           </Button>
           <input
@@ -205,12 +259,20 @@ export default function SettingsPage() {
             id="import-file"
           />
           <label htmlFor="import-file">
-            <Button variant="contained" component="span" color="primary">
+            <Button 
+              variant="contained" 
+              component="span"
+              sx={iosButtonStyle}
+            >
               {t.import_data}
             </Button>
           </label>
         </Box>
-        <Button variant="contained" color="error" onClick={() => setIsDeleteModalOpen(true)}>
+        <Button 
+          variant="contained" 
+          onClick={() => setIsDeleteModalOpen(true)}
+          sx={iosButtonStyleError}
+        >
           {t.delete_all_data}
         </Button>
       </Paper>
@@ -220,6 +282,12 @@ export default function SettingsPage() {
         onClose={() => setIsDeleteModalOpen(false)}
         aria-labelledby="delete-all-data-modal-title"
         aria-describedby="delete-all-data-modal-description"
+        BackdropProps={{
+          sx: {
+            backgroundColor: 'rgba(0, 0, 0, 0.2)',
+            backdropFilter: 'blur(4px)',
+          }
+        }}
       >
         <Box sx={{
           position: 'absolute',
@@ -227,10 +295,24 @@ export default function SettingsPage() {
           left: '50%',
           transform: 'translate(-50%, -50%)',
           width: 400,
-          bgcolor: 'background.paper',
-          border: '2px solid #000',
-          boxShadow: 24,
+          backgroundColor: 'rgba(255, 255, 255, 0.2)',
+          backdropFilter: 'blur(20px)',
+          border: '1px solid rgba(255, 255, 255, 0.3)',
+          boxShadow: '0 16px 48px rgba(0, 0, 0, 0.4)',
+          borderRadius: 2,
           p: 4,
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%)',
+            pointerEvents: 'none',
+            zIndex: -1,
+            borderRadius: 'inherit',
+          },
         }}>
           <Typography id="delete-all-data-modal-title" variant="h6" component="h2" gutterBottom>
             {t.confirm_delete_all_data}
@@ -250,10 +332,18 @@ export default function SettingsPage() {
             label={t.i_understand_and_wish_to_continue}
           />
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 2 }}>
-            <Button variant="outlined" onClick={() => setIsDeleteModalOpen(false)}>
+            <Button 
+              variant="outlined" 
+              onClick={() => setIsDeleteModalOpen(false)}
+              sx={iosButtonStyle}
+            >
               {t.cancel}
             </Button>
-            <Button variant="contained" color="error" onClick={handleDeleteAllData}>
+            <Button 
+              variant="contained" 
+              onClick={handleDeleteAllData}
+              sx={iosButtonStyleError}
+            >
               {t.delete_all_data}
             </Button>
           </Box>

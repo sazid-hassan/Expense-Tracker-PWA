@@ -8,7 +8,7 @@ body {
 }
 
 /* Enhanced Glass-morphism effects */
-.MuiPaper-root {
+.MuiPaper-root:not(.MuiAppBar-root) {
   background-color: rgba(255, 255, 255, 0.1) !important;
   backdrop-filter: blur(20px) !important;
   border: 1px solid rgba(255, 255, 255, 0.2) !important;
@@ -31,7 +31,39 @@ body {
 }
 
 /* Keep bottom navigation and app bar styling as defined in components */
-.MuiBottomNavigation-root,
-.MuiAppBar-root {
+.MuiBottomNavigation-root {
   backdrop-filter: blur(10px) !important;
+}
+
+/* iOS-style AppBar specific styling - High specificity to override MUI classes */
+.MuiAppBar-root,
+.MuiAppBar-root.MuiPaper-root,
+[class*="MuiAppBar-root"],
+[class*="css-"][class*="MuiAppBar-root"] {
+  backdrop-filter: blur(25px) saturate(200%) !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%) !important;
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  box-shadow: none !important;
+}
+
+/* Additional override for any MUI generated classes */
+.MuiAppBar-root * {
+  background-color: transparent !important;
+}
+
+/* Nuclear option - target the specific class you mentioned */
+[class*="css-"][class*="MuiBottomNavigation-root"],
+[class*="css-7ax0nd-MuiBottomNavigation-root"],
+.MuiAppBar-root [class*="css-"],
+.MuiAppBar-root [class*="MuiBottomNavigation"] {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%) !important;
+}
+
+/* Ensure iOS AppBar has proper safe area support */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .MuiAppBar-root .MuiToolbar-root {
+    padding-top: env(safe-area-inset-top) !important;
+  }
 }

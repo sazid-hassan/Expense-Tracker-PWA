@@ -14,6 +14,7 @@ import {
   BottomNavigation,
   BottomNavigationAction,
   Paper,
+  Typography,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import HomeIcon from '@mui/icons-material/Home';
@@ -34,6 +35,22 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const { t } = useTranslation();
   const pathname = usePathname();
   const [bottomNavValue, setBottomNavValue] = useState(0);
+
+  // Get page title based on current route
+  const getPageTitle = () => {
+    switch (pathname) {
+      case '/':
+        return t.home || 'Dashboard';
+      case '/categories':
+        return t.categories || 'Categories';
+      case '/transactions':
+        return t.transactions || 'Transactions';
+      case '/settings':
+        return t.settings || 'Settings';
+      default:
+        return t.expense_tracker || 'Expense Tracker';
+    }
+  };
 
   const [modalOpen, setModalOpen] = useState(false);
   const [transaction, setTransaction] = useState<Omit<Transaction, 'id'> | null>(null);
@@ -108,20 +125,50 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             minHeight: '100vh',
           }}
         >
-          {/* AppBar - only show title on desktop, full bar on mobile */}
-          <AppBar 
-            position="static"
-            sx={{
-              backgroundColor: 'rgba(25, 118, 210, 0.1)',
-              backdropFilter: 'blur(20px)',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-            }}
-          >
-            <Toolbar>
-             
-            </Toolbar>
-          </AppBar>
+          {/* iOS-style AppBar for mobile */}
+          {isMobile && (
+            <AppBar 
+              position="static"
+              sx={{
+                backgroundColor: 'rgba(255, 255, 255, 0.05) !important',
+                backdropFilter: 'blur(25px) saturate(200%)',
+                WebkitBackdropFilter: 'blur(25px) saturate(200%)',
+                borderBottom: '0.5px solid rgba(255, 255, 255, 0.15)',
+                boxShadow: 'none',
+                color: 'rgba(0, 0, 0, 0.9)',
+                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%)',
+                border: '1px solid rgba(255, 255, 255, 0.18)',
+              }}
+            >
+              <Toolbar 
+                sx={{ 
+                  minHeight: '44px !important',
+                  height: '44px',
+                  paddingTop: 'env(safe-area-inset-top, 0px)',
+                  paddingX: 2,
+                  justifyContent: 'center',
+                  position: 'relative',
+                }}
+              >
+                <Typography 
+                  variant="h6" 
+                  component="h1"
+                  sx={{ 
+                    fontWeight: 600,
+                    fontSize: '17px',
+                    lineHeight: '22px',
+                    color: 'rgba(0, 0, 0, 0.9)',
+                    textAlign: 'center',
+                    letterSpacing: '-0.41px',
+                    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif',
+                    textShadow: '0 1px 3px rgba(255, 255, 255, 0.9), 0 0 10px rgba(255, 255, 255, 0.5)',
+                  }}
+                >
+                  {getPageTitle()}
+                </Typography>
+              </Toolbar>
+            </AppBar>
+          )}
           
           {/* Content Container */}
           <Container 

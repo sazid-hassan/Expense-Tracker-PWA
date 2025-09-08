@@ -51,8 +51,8 @@
   "description": "Description",
   "income": "Income",
   "expense": "Expense",
-  "please_fill_all_fields_for_new_category": "Please fill in all fields for the new category.",
-  "please_fill_all_fields_for_category": "Please fill in all fields for the category.",
+  "please_fill_name_for_new_category": "Please fill in the name for the new category.",
+  "please_fill_name_for_category": "Please fill in the name for the category.",
   "are_you_sure_delete_category": "Are you sure you want to delete this category?",
   "please_select_category_for_transaction": "Please select a category for the transaction.",
   "data_imported_successfully": "Data imported successfully!",
@@ -92,5 +92,8 @@
   "deleting": "Deleting...",
   "importing": "Importing data...",
   "exporting": "Exporting data...",
-  "please_wait": "Please wait..."
+  "please_wait": "Please wait...",
+  "background_image": "Background Image",
+  "user_preferences": "User Preferences",
+  "data_management": "Data Management"
 }

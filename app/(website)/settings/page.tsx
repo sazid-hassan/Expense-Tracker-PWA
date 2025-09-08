@@ -4,6 +4,7 @@
 import { useState, useEffect } from 'react';
 import { useStore } from '../../store/useStore';
 import { AppSettings, Currency, Language } from '../../types';
+import { getAllBackgroundImages } from '../../utils/backgroundImages';
   import {
   TextField,
   Button,
@@ -75,13 +76,27 @@ export default function SettingsPage() {
   const [currentSettings, setCurrentSettings] = useState<AppSettings>({
     ...settings,
     language: settings.language || Language.EN, // Ensure language is always defined
+    backgroundImage: settings.backgroundImage || 'paper-desktop', // Ensure backgroundImage is always defined
   });
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteConfirmationChecked, setDeleteConfirmationChecked] = useState(false);
+  const [availableBackgrounds] = useState(getAllBackgroundImages());
 
   useEffect(() => {
-    setCurrentSettings(settings);
-  }, [settings]);
+    const validatedSettings = {
+      ...settings,
+      language: settings.language || Language.EN,
+      backgroundImage: settings.backgroundImage || 'paper-desktop',
+    };
+    
+    // Validate that the backgroundImage exists in available backgrounds
+    const isValidBackground = availableBackgrounds.some(bg => bg.id === validatedSettings.backgroundImage);
+    if (!isValidBackground) {
+      validatedSettings.backgroundImage = 'paper-desktop';
+    }
+    
+    setCurrentSettings(validatedSettings);
+  }, [settings, availableBackgrounds]);
 
   const { t } = useTranslation();
 
@@ -225,6 +240,25 @@ export default function SettingsPage() {
               {Object.values(Language).map((langValue) => (
                 <MenuItem key={langValue} value={langValue}>
                   {langValue}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
+        <Box sx={{ mb: 3 }}>
+          <FormControl fullWidth variant="outlined">
+            <InputLabel id="background-image-label">{t.background_image}</InputLabel>
+            <Select
+              labelId="background-image-label"
+              id="backgroundImage"
+              name="backgroundImage"
+              value={currentSettings.backgroundImage || 'paper-desktop'}
+              onChange={handleSelectChange}
+              label={t.background_image}
+            >
+              {availableBackgrounds.map((bg) => (
+                <MenuItem key={bg.id} value={bg.id}>
+                  {bg.name}
                 </MenuItem>
               ))}
             </Select>

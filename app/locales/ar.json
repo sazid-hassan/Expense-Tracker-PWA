@@ -51,8 +51,8 @@
   "description": "الوصف",
   "income": "دخل",
   "expense": "مصروف",
-  "please_fill_all_fields_for_new_category": "يرجى ملء جميع الحقول للفئة الجديدة.",
-  "please_fill_all_fields_for_category": "يرجى ملء جميع الحقول للفئة.",
+  "please_fill_name_for_new_category": "يرجى ملء الاسم للفئة الجديدة.",
+  "please_fill_name_for_category": "يرجى ملء الاسم للفئة.",
   "are_you_sure_delete_category": "هل أنت متأكد أنك تريد حذف هذه الفئة؟",
   "please_select_category_for_transaction": "يرجى تحديد فئة للمعاملة.",
   "data_imported_successfully": "تم استيراد البيانات بنجاح!",
@@ -81,5 +81,8 @@
   "this_month_income": "دخل هذا الشهر",
   "this_month_expenses": "مصروفات هذا الشهر",
   "this_month_saving": "ادخار هذا الشهر",
-  "this_year_saving": "ادخار هذا العام"
+  "this_year_saving": "ادخار هذا العام",
+  "background_image": "صورة الخلفية",
+  "user_preferences": "تفضيلات المستخدم",
+  "data_management": "إدارة البيانات"
 }

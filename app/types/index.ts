@@ -3,7 +3,7 @@ export type TransactionType = 'income' | 'expense';
 export interface Category {
   id: string;
   name: string;
-  description: string;
+  description?: string;
   type: TransactionType;
 }
 
@@ -33,8 +33,22 @@ export enum Language {
   AR = 'Arabic',
 }
 
+export enum BackgroundImage {
+  PAPER_DESKTOP = 'paper-desktop',
+  GREEN_BG = 'green-bg',
+  DARK_STUDIO = 'dark-studio',
+}
+
+export interface BackgroundImageInfo {
+  id: string;
+  name: string;
+  path: string;
+  imagePath: string;
+}
+
 export interface AppSettings {
   currency: Currency;
   userName: string;
   language: Language;
+  backgroundImage: string; // Changed to string to support dynamic background images
 }

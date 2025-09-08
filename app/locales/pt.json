@@ -51,8 +51,8 @@
   "description": "Descrição",
   "income": "Receita",
   "expense": "Despesa",
-  "please_fill_all_fields_for_new_category": "Por favor, preencha todos os campos para a nova categoria.",
-  "please_fill_all_fields_for_category": "Por favor, preencha todos os campos para a categoria.",
+  "please_fill_name_for_new_category": "Por favor, preencha o nome para a nova categoria.",
+  "please_fill_name_for_category": "Por favor, preencha o nome para a categoria.",
   "are_you_sure_delete_category": "Tem certeza de que deseja excluir esta categoria?",
   "please_select_category_for_transaction": "Por favor, selecione uma categoria para a transação.",
   "data_imported_successfully": "Dados importados com sucesso!",
@@ -81,5 +81,8 @@
   "this_month_income": "Receita deste mês",
   "this_month_expenses": "Despesas deste mês",
   "this_month_saving": "Economia deste mês",
-  "this_year_saving": "Economia deste ano"
+  "this_year_saving": "Economia deste ano",
+  "background_image": "Imagem de Fundo",
+  "user_preferences": "Preferências do Usuário",
+  "data_management": "Gerenciamento de Dados"
 }

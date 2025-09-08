@@ -28,12 +28,15 @@ import TransactionModal from './TransactionModal';
 import GlobalLoader from './GlobalLoader';
 import Sidebar from './Sidebar';
 import { Transaction } from '../types';
+import { useStore } from '../store/useStore';
+import { getBackgroundImagePath } from '../utils/backgroundImages';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const { t } = useTranslation();
   const pathname = usePathname();
+  const { settings } = useStore();
   const [bottomNavValue, setBottomNavValue] = useState(0);
 
   // Get page title based on current route
@@ -50,6 +53,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       default:
         return t.expense_tracker || 'Expense Tracker';
     }
+  };
+
+  // Get background image URL based on settings
+  const getBackgroundImageUrl = () => {
+    const { backgroundImage } = settings;
+    return getBackgroundImagePath(backgroundImage || 'paper-desktop');
   };
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -103,17 +112,26 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         sx={{ 
           display: 'flex',
           minHeight: '100vh',
-          backgroundImage: isMobile 
-            ? 'url(/paper-mobile.jpg)' 
-            : 'url(/paper-desktop.jpg)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          backgroundAttachment: 'fixed',
+          position: 'relative',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundImage: `url(${getBackgroundImageUrl()})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            backgroundAttachment: 'fixed',
+            filter: 'blur(3px)',
+            zIndex: 0,
+          }
         }}
       >
         {/* Desktop Sidebar */}
-        {!isMobile && <Sidebar />}
+        {!isMobile && <Box sx={{ position: 'relative', zIndex: 1 }}><Sidebar /></Box>}
         
         {/* Main Content Area */}
         <Box
@@ -123,6 +141,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             display: 'flex',
             flexDirection: 'column',
             minHeight: '100vh',
+            position: 'relative',
+            zIndex: 1,
           }}
         >
           {/* iOS-style AppBar for mobile */}

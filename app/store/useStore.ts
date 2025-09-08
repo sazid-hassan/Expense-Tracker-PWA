@@ -1,7 +1,8 @@
 import { create } from 'zustand';
 import { persist, PersistStorage } from 'zustand/middleware';
-import { Transaction, Category, AppSettings, Currency, Language } from '../types';
+import { Transaction, Category, AppSettings, Currency, Language, BackgroundImage } from '../types';
 import { v4 as uuidv4 } from 'uuid';
+import { getBackgroundImageInfo } from '../utils/backgroundImages';
 
 interface LoadingState {
   isLoading: boolean;
@@ -27,10 +28,65 @@ interface StoreState {
   hideLoading: () => void;
 }
 
+// Migration function to handle old data format
+const migrateSettings = (settings: Partial<AppSettings> | null | undefined): AppSettings => {
+  const defaultSettings: AppSettings = {
+    currency: Currency.USD,
+    userName: 'User',
+    language: Language.EN,
+    backgroundImage: 'paper-desktop',
+  };
+
+  if (!settings) return defaultSettings;
+
+  // Handle old BackgroundImage enum values
+  let backgroundImage = settings.backgroundImage;
+  if (backgroundImage) {
+    // Map old enum values to new string values
+    const enumMapping: Record<string, string> = {
+      [BackgroundImage.PAPER_DESKTOP]: 'paper-desktop',
+      [BackgroundImage.GREEN_BG]: 'green-bg',
+      [BackgroundImage.DARK_STUDIO]: 'dark-studio',
+    };
+
+    if (enumMapping[backgroundImage]) {
+      backgroundImage = enumMapping[backgroundImage];
+    }
+
+    // Validate that the background image exists
+    if (!getBackgroundImageInfo(backgroundImage)) {
+      backgroundImage = 'paper-desktop'; // fallback to default
+    }
+  } else {
+    backgroundImage = 'paper-desktop';
+  }
+
+  return {
+    currency: settings.currency || defaultSettings.currency,
+    userName: settings.userName || defaultSettings.userName,
+    language: settings.language || defaultSettings.language,
+    backgroundImage: backgroundImage,
+  };
+};
+
 const customStorage: PersistStorage<StoreState> = {
   getItem: (name) => {
     const item = typeof window !== 'undefined' ? localStorage.getItem(name) : null;
-    return item ? JSON.parse(item) : null;
+    if (!item) return null;
+    
+    try {
+      const data = JSON.parse(item);
+      
+      // Migrate settings if they exist
+      if (data.state && data.state.settings) {
+        data.state.settings = migrateSettings(data.state.settings);
+      }
+      
+      return data;
+    } catch (error) {
+      console.error('Error parsing stored data:', error);
+      return null;
+    }
   },
   setItem: (name, value) => {
     if (typeof window !== 'undefined') {
@@ -86,6 +142,7 @@ export const useStore = create<StoreState>()(
         currency: Currency.USD,
         userName: 'User',
         language: Language.EN,
+        backgroundImage: 'paper-desktop', // Default to paper-desktop
       },
       loading: {
         isLoading: false,
@@ -121,7 +178,11 @@ export const useStore = create<StoreState>()(
           categories: state.categories.filter((category) => category.id !== id),
         })),
       updateSettings: (settings) => set({ settings }),
-      importData: (data) => set({ transactions: data.transactions, categories: data.categories, settings: data.settings }),
+      importData: (data) => set({ 
+        transactions: data.transactions || [], 
+        categories: data.categories || [], 
+        settings: migrateSettings(data.settings) 
+      }),
       clearAllData: () => set({ transactions: [], categories: [] }),
       setLoading: (loading) => 
         set((state) => ({

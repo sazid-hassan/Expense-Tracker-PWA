@@ -51,8 +51,8 @@
   "description": "Beschrijving",
   "income": "Inkomen",
   "expense": "Uitgave",
-  "please_fill_all_fields_for_new_category": "Vul alle velden in voor de nieuwe categorie.",
-  "please_fill_all_fields_for_category": "Vul alle velden in voor de categorie.",
+  "please_fill_name_for_new_category": "Vul de naam in voor de nieuwe categorie.",
+  "please_fill_name_for_category": "Vul de naam in voor de categorie.",
   "are_you_sure_delete_category": "Weet u zeker dat u deze categorie wilt verwijderen?",
   "please_select_category_for_transaction": "Selecteer een categorie voor de transactie.",
   "data_imported_successfully": "Gegevens succesvol geïmporteerd!",
@@ -81,5 +81,8 @@
   "this_month_income": "Inkomen deze maand",
   "this_month_expenses": "Uitgaven deze maand",
   "this_month_saving": "Besparing deze maand",
-  "this_year_saving": "Besparing dit jaar"
+  "this_year_saving": "Besparing dit jaar",
+  "background_image": "Achtergrondafbeelding",
+  "user_preferences": "Gebruikersvoorkeuren",
+  "data_management": "Gegevensbeheer"
 }

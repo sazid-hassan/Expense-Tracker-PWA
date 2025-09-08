@@ -51,8 +51,8 @@
   "description": "বর্ণনা",
   "income": "আয়",
   "expense": "খরচ",
-  "please_fill_all_fields_for_new_category": "নতুন ক্যাটাগরির জন্য সব ঘর পূরণ করুন।",
-  "please_fill_all_fields_for_category": "ক্যাটাগরির জন্য সব ঘর পূরণ করুন।",
+  "please_fill_name_for_new_category": "নতুন ক্যাটাগরির জন্য নাম পূরণ করুন।",
+  "please_fill_name_for_category": "ক্যাটাগরির জন্য নাম পূরণ করুন।",
   "are_you_sure_delete_category": "আপনি কি নিশ্চিত যে আপনি এই ক্যাটাগরি মুছে ফেলতে চান?",
   "please_select_category_for_transaction": "লেনদেনের জন্য একটি ক্যাটাগরি নির্বাচন করুন।",
   "data_imported_successfully": "ডেটা সফলভাবে ইম্পোর্ট করা হয়েছে!",
@@ -81,5 +81,8 @@
   "this_month_income": "এই মাসের আয়",
   "this_month_expenses": "এই মাসের খরচ",
   "this_month_saving": "এই মাসের সঞ্চয়",
-  "this_year_saving": "এই বছরের সঞ্চয়"
+  "this_year_saving": "এই বছরের সঞ্চয়",
+  "background_image": "ব্যাকগ্রাউন্ড ইমেজ",
+  "user_preferences": "ব্যবহারকারীর পছন্দ",
+  "data_management": "ডেটা ব্যবস্থাপনা"
 }

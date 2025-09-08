@@ -125,9 +125,11 @@ export default function TransactionDetailsModal({ open, onClose, transaction }: 
               <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
                 {transaction.category.name}
               </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {transaction.category.description}
-              </Typography>
+              {transaction.category.description && (
+                <Typography variant="body2" color="text.secondary">
+                  {transaction.category.description}
+                </Typography>
+              )}
             </Box>
           </Box>
 

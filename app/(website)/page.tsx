@@ -1,11 +1,16 @@
 'use client';
 
+import { useState } from 'react';
 import { useStore } from '../store/useStore';
 
 import {
   Paper,
   Typography,
   Box,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@mui/material';
 
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
@@ -15,6 +20,7 @@ import { SkeletonLoader } from '../components/Loader';
 
 export default function HomePage() {
   const { transactions, settings } = useStore();
+  const [selectedMonthlyYear, setSelectedMonthlyYear] = useState<string>(new Date().getFullYear().toString());
 
   const getCurrencySymbol = (currencyString: string) => {
     const parts = currencyString.split(' ');
@@ -79,10 +85,10 @@ export default function HomePage() {
 
   const monthlyData = months.map(month => {
     const income = transactions
-      .filter(t => new Date(t.date).getMonth() === (parseInt(month.value, 10) - 1) && t.type === 'income')
+      .filter(t => new Date(t.date).getMonth() === (parseInt(month.value, 10) - 1) && new Date(t.date).getFullYear().toString() === selectedMonthlyYear && t.type === 'income')
       .reduce((acc, t) => acc + t.amount, 0);
     const expense = transactions
-      .filter(t => new Date(t.date).getMonth() === (parseInt(month.value, 10) - 1) && t.type === 'expense')
+      .filter(t => new Date(t.date).getMonth() === (parseInt(month.value, 10) - 1) && new Date(t.date).getFullYear().toString() === selectedMonthlyYear && t.type === 'expense')
       .reduce((acc, t) => acc + t.amount, 0);
     return { month: month.label, income, expense };
   });
@@ -95,8 +101,8 @@ export default function HomePage() {
     }, {});
 
   const categoryChartData = Object.keys(categorySpending).map(category => ({
-    name: category,
-    value: categorySpending[category],
+    category: category,
+    spending: categorySpending[category],
   }));
 
   if (loading) {
@@ -322,7 +328,7 @@ export default function HomePage() {
         <Paper 
           elevation={0}
           sx={{
-            p: 3,
+            py: 3,
             mb: 4,
             backgroundColor: 'rgba(255, 255, 255, 0.1)',
             backdropFilter: 'blur(20px)',
@@ -349,8 +355,8 @@ export default function HomePage() {
             data={yearlyData}
             margin={{
               top: 5,
-              right: 30,
-              left: 20,
+              right: 0,
+              left: 0,
               bottom: 5,
             }}
           >
@@ -365,13 +371,27 @@ export default function HomePage() {
         </ResponsiveContainer>
         </Paper>
 
-        <Typography variant="h5" component="h2" gutterBottom sx={{ mt: 4 }}>
-          Monthly Overview
-        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 4, mb: 2 }}>
+          <Typography variant="h5" component="h2">
+            Monthly Overview
+          </Typography>
+          <FormControl sx={{ minWidth: 120 }}>
+            <InputLabel>Year</InputLabel>
+            <Select
+              value={selectedMonthlyYear}
+              onChange={(e) => setSelectedMonthlyYear(e.target.value)}
+              label="Year"
+            >
+              {years.map(year => (
+                <MenuItem key={year} value={year}>{year}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
         <Paper 
           elevation={0}
           sx={{
-            p: 3,
+            py: 3,
             mb: 4,
             backgroundColor: 'rgba(255, 255, 255, 0.1)',
             backdropFilter: 'blur(20px)',
@@ -398,8 +418,8 @@ export default function HomePage() {
             data={monthlyData}
             margin={{
               top: 5,
-              right: 30,
-              left: 20,
+              right: 0,
+              left: 0,
               bottom: 5,
             }}
           >
@@ -420,7 +440,7 @@ export default function HomePage() {
         <Paper 
           elevation={0}
           sx={{
-            p: 3,
+            py: 3,
             mb: 4,
             backgroundColor: 'rgba(255, 255, 255, 0.1)',
             backdropFilter: 'blur(20px)',
@@ -447,17 +467,17 @@ export default function HomePage() {
               data={categoryChartData}
               margin={{
                 top: 5,
-                right: 30,
-                left: 20,
+                right: 0,
+                left: 0,
                 bottom: 5,
               }}
             >
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
+              <XAxis dataKey="category" />
               <YAxis />
               <Tooltip formatter={(value: number) => `${getCurrencySymbol(settings.currency)} ${value.toFixed(2)}`} />
               <Legend />
-              <Bar dataKey="value" fill="#8884d8" />
+              <Bar dataKey="spending" fill="#8884d8" />
             </BarChart>
           </ResponsiveContainer>
         </Paper>

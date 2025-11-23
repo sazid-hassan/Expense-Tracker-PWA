@@ -343,6 +343,13 @@ export default function TransactionsPage() {
             </Select>
             </FormControl>
             <Button 
+              variant="contained" 
+              onClick={handleCloseFilterModal}
+              sx={iosButtonStyleSecondary}
+            >
+              {t.apply_filters}
+            </Button>
+            <Button 
               variant="outlined" 
               onClick={() => {
                 setFilterStartDate('');
@@ -350,16 +357,9 @@ export default function TransactionsPage() {
                 setFilterMonth('');
                 setFilterYear('');
               }}
-              sx={iosButtonStyleSecondary}
+              sx={iosButtonStyleError}
             >
               {t.clear_filters}
-            </Button>
-            <Button 
-              variant="contained" 
-              onClick={handleCloseFilterModal}
-              sx={iosButtonStyle}
-            >
-              {t.apply_filters}
             </Button>
           </Box>
         </Box>

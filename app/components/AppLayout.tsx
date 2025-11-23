@@ -28,27 +28,30 @@ import TransactionModal from './TransactionModal';
 import GlobalLoader from './GlobalLoader';
 import Sidebar from './Sidebar';
 import { Transaction } from '../types';
+import { useStore } from '../store/useStore';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const { t } = useTranslation();
   const pathname = usePathname();
+  const { settings } = useStore();
   const [bottomNavValue, setBottomNavValue] = useState(0);
 
   // Get page title based on current route
   const getPageTitle = () => {
-    switch (pathname) {
-      case '/':
-        return t.home || 'Dashboard';
-      case '/categories':
-        return t.categories || 'Categories';
-      case '/transactions':
-        return t.transactions || 'Transactions';
-      case '/settings':
-        return t.settings || 'Settings';
-      default:
-        return t.expense_tracker || 'Expense Tracker';
+    if (pathname === '/') {
+      return t.home || 'Dashboard';
+    } else if (pathname === '/categories') {
+      return t.categories || 'Categories';
+    } else if (pathname === '/transactions') {
+      return t.transactions || 'Transactions';
+    } else if (pathname === '/settings/select-background') {
+      return t.select_background || 'Select Background';
+    } else if (pathname.startsWith('/settings')) {
+      return t.settings || 'Settings';
+    } else {
+      return t.expense_tracker || 'Expense Tracker';
     }
   };
 
@@ -60,21 +63,16 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   // Update bottom navigation value based on current route
   useEffect(() => {
-    switch (pathname) {
-      case '/':
-        setBottomNavValue(0);
-        break;
-      case '/categories':
-        setBottomNavValue(1);
-        break;
-      case '/transactions':
-        setBottomNavValue(2);
-        break;
-      case '/settings':
-        setBottomNavValue(3);
-        break;
-      default:
-        setBottomNavValue(0);
+    if (pathname === '/') {
+      setBottomNavValue(0);
+    } else if (pathname.startsWith('/categories')) {
+      setBottomNavValue(1);
+    } else if (pathname.startsWith('/transactions')) {
+      setBottomNavValue(2);
+    } else if (pathname.startsWith('/settings')) {
+      setBottomNavValue(3);
+    } else {
+      setBottomNavValue(0);
     }
   }, [pathname]);
 
@@ -99,22 +97,30 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <Box 
-        sx={{ 
+      <Box
+        sx={{
           display: 'flex',
           minHeight: '100vh',
-          backgroundImage: isMobile 
-            ? 'url(/paper-mobile.jpg)' 
-            : 'url(/paper-desktop.jpg)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          backgroundAttachment: 'fixed',
+          position: 'relative',
+          '&::before': {
+            content: '""',
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundImage: `url(/${settings.backgroundImage || 'paper-desktop.jpg'})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            opacity: settings.backgroundOpacity || 1,
+            zIndex: -1,
+          },
         }}
       >
         {/* Desktop Sidebar */}
         {!isMobile && <Sidebar />}
-        
+
         {/* Main Content Area */}
         <Box
           component="main"
@@ -127,7 +133,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         >
           {/* iOS-style AppBar for mobile */}
           {isMobile && (
-            <AppBar 
+            <AppBar
               position="static"
               sx={{
                 backgroundColor: 'rgba(255, 255, 255, 0.05) !important',
@@ -140,8 +146,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 border: '1px solid rgba(255, 255, 255, 0.18)',
               }}
             >
-              <Toolbar 
-                sx={{ 
+              <Toolbar
+                sx={{
                   minHeight: '44px !important',
                   height: '44px',
                   paddingTop: 'env(safe-area-inset-top, 0px)',
@@ -150,10 +156,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                   position: 'relative',
                 }}
               >
-                <Typography 
-                  variant="h6" 
+                <Typography
+                  variant="h6"
                   component="h1"
-                  sx={{ 
+                  sx={{
                     fontWeight: 600,
                     fontSize: '17px',
                     lineHeight: '22px',
@@ -169,10 +175,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               </Toolbar>
             </AppBar>
           )}
-          
+
           {/* Content Container */}
-          <Container 
-            sx={{ 
+          <Container
+            sx={{
               pb: isMobile ? '80px' : 2,
               pt: 2,
               flexGrow: 1,
@@ -182,21 +188,21 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </Container>
         </Box>
       </Box>
-      
+
       {/* Bottom Navigation for Mobile */}
       {isMobile && (
-        <Paper 
-          sx={{ 
-            position: 'fixed', 
-            bottom: 0, 
-            left: 0, 
-            right: 0, 
+        <Paper
+          sx={{
+            position: 'fixed',
+            bottom: 0,
+            left: 0,
+            right: 0,
             zIndex: 1000,
             backgroundColor: 'rgba(255, 255, 255, 0.1)',
             backdropFilter: 'blur(20px)',
             border: '1px solid rgba(255, 255, 255, 0.2)',
             boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-          }} 
+          }}
           elevation={0}
         >
           <BottomNavigation
@@ -233,7 +239,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </BottomNavigation>
         </Paper>
       )}
-      
+
       <Fab
         color="primary"
         aria-label="add"

@@ -86,6 +86,8 @@ export const useStore = create<StoreState>()(
         currency: Currency.USD,
         userName: 'User',
         language: Language.EN,
+        backgroundImage: 'paper-desktop.jpg',
+        backgroundOpacity: 0.75,
       },
       loading: {
         isLoading: false,

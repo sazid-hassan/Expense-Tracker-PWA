@@ -2,6 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { useStore } from '../../store/useStore';
 import { AppSettings, Currency, Language } from '../../types';
   import {
@@ -18,6 +19,7 @@ import { AppSettings, Currency, Language } from '../../types';
   Modal,
   Checkbox,
   FormControlLabel,
+  Slider,
 } from '@mui/material';
 
 import Snackbar from '@mui/material/Snackbar';
@@ -229,6 +231,40 @@ export default function SettingsPage() {
               ))}
             </Select>
           </FormControl>
+        </Box>
+        <Box sx={{ mb: 3 }}>
+          <Typography gutterBottom>
+            {t.background_opacity || 'Background Opacity'}: {Math.round((currentSettings.backgroundOpacity || 1) * 100)}%
+          </Typography>
+          <Slider
+            value={currentSettings.backgroundOpacity || 1}
+            onChange={(e, value) => setCurrentSettings(prev => ({...prev, backgroundOpacity: value as number}))}
+            min={0}
+            max={1}
+            step={0.05}
+            marks={[
+              { value: 0, label: '0%' },
+              { value: 0.25, label: '25%' },
+              { value: 0.5, label: '50%' },
+              { value: 0.75, label: '75%' },
+              { value: 1, label: '100%' },
+            ]}
+            valueLabelDisplay="auto"
+            valueLabelFormat={(value) => `${Math.round(value * 100)}%`}
+          />
+        </Box>
+        <Box sx={{ mb: 3 }}>
+         
+          <Link 
+            href="/settings/select-background"
+            style={{ 
+              color: 'rgba(0, 122, 255, 0.9)',
+              textDecoration: 'none',
+              fontWeight: 600,
+            }}
+          >
+            {t.select_background || 'Select Background Image'} →
+          </Link>
         </Box>
         <Button 
           variant="contained" 

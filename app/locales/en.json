@@ -92,5 +92,13 @@
   "deleting": "Deleting...",
   "importing": "Importing data...",
   "exporting": "Exporting data...",
-  "please_wait": "Please wait..."
+  "please_wait": "Please wait...",
+  "select_background": "Select Background Image",
+  "background_opacity": "Background Opacity",
+  "background_image": "Background Image",
+  "choose_background_image": "Choose Background Image",
+  "select_background_description": "Select a background image for your expense tracker",
+  "back": "Back",
+  "data_management": "Data Management",
+  "user_preferences": "User Preferences"
 }

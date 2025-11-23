@@ -22,12 +22,30 @@ body {
   backdrop-filter: blur(20px) !important;
 }
 
-/* Keep snackbars fully opaque for readability */
+/* Keep snackbars readable with blurry background */
 .MuiSnackbar-root .MuiPaper-root {
-  background-color: inherit !important;
+  backdrop-filter: blur(30px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(30px) saturate(180%) !important;
   opacity: 1 !important;
-  backdrop-filter: none !important;
-  border: none !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Enhance Alert backgrounds within Snackbars for better readability */
+.MuiSnackbar-root .MuiAlert-standardSuccess {
+  background-color: rgba(46, 125, 50, 0.95) !important;
+}
+
+.MuiSnackbar-root .MuiAlert-standardError {
+  background-color: rgba(211, 47, 47, 0.95) !important;
+}
+
+.MuiSnackbar-root .MuiAlert-standardWarning {
+  background-color: rgba(237, 108, 2, 0.95) !important;
+}
+
+.MuiSnackbar-root .MuiAlert-standardInfo {
+  background-color: rgba(2, 136, 209, 0.95) !important;
 }
 
 /* Keep bottom navigation and app bar styling as defined in components */

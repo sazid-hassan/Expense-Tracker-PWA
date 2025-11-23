@@ -105,6 +105,7 @@ export default function TransactionsPage() {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
+  const [expandedAccordion, setExpandedAccordion] = useState<string | false>(false);
 
   const handleOpenModal = (transaction?: Transaction) => {
     setTransactionToEdit(transaction || null);
@@ -367,16 +368,43 @@ export default function TransactionsPage() {
       {isMobile ? (
         <Box>
           {paginatedTransactions.map((transaction) => (
-            <Accordion key={transaction.id}>
+            <Accordion 
+              key={transaction.id}
+              expanded={expandedAccordion === transaction.id}
+              onChange={(event, isExpanded) => setExpandedAccordion(isExpanded ? transaction.id : false)}
+            >
               <AccordionSummary
                 expandIcon={<span>&#9660;</span>}
                 aria-controls={`panel-${transaction.id}-content`}
                 id={`panel-${transaction.id}-header`}
+                sx={{
+                  '& .MuiAccordionSummary-content': {
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    width: '100%',
+                    paddingRight: "8px"
+                  }
+                }}
               >
-                <Typography sx={{ width: '33%', flexShrink: 0 }}>
-                  {transaction.category.name}
-                </Typography>
-                <Typography sx={{ color: transaction.type === 'income' ? 'green' : 'red' }}>
+                <Box sx={{ flexGrow: 1, overflow: 'hidden', mr: 2 }}>
+                  <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontWeight: 500 }}>
+                    {transaction.category.name}
+                  </Typography>
+                  {transaction.notes && expandedAccordion !== transaction.id && (
+                    <Typography sx={{ 
+                      fontSize: '0.75rem', 
+                      color: 'text.secondary', 
+                      overflow: 'hidden', 
+                      textOverflow: 'ellipsis', 
+                      whiteSpace: 'nowrap',
+                      opacity: 0.7
+                    }}>
+                      {transaction.notes.substring(0, 30)}{transaction.notes.length > 30 ? '...' : ''}
+                    </Typography>
+                  )}
+                </Box>
+                <Typography sx={{ color: transaction.type === 'income' ? 'green' : 'red', flexShrink: 0 }}>
                   {transaction.type === 'income' ? '+' : '-'} {getCurrencySymbol(settings.currency)} {transaction.amount.toFixed(2)}
                 </Typography>
               </AccordionSummary>

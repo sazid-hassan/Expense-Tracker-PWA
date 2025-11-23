@@ -142,9 +142,10 @@ export default function CategoriesPage() {
   };
 
   const handleAddCategory = () => {
-    if (newCategory && newCategory.name && newCategory.description) {
+    if (newCategory && newCategory.name) {
       addCategory({ ...newCategory, id: uuidv4() });
       setNewCategory(null);
+      handleCloseAddModal();
       showSnackbar(t.category_added_successfully, 'success');
     } else {
       showSnackbar(t.please_fill_all_fields_for_new_category, 'error');
@@ -152,9 +153,10 @@ export default function CategoriesPage() {
   };
 
   const handleUpdateCategory = () => {
-    if (editingCategory && editingCategory.name && editingCategory.description) {
+    if (editingCategory && editingCategory.name) {
       updateCategory(editingCategory);
       setEditingCategory(null);
+      handleCloseAddModal();
       showSnackbar(t.category_updated_successfully, 'success');
     } else {
       showSnackbar(t.please_fill_all_fields_for_category, 'error');

@@ -7,7 +7,8 @@ A modern, responsive, and progressive web application (PWA) for tracking persona
 ### 📊 **Financial Management**
 *   **Transaction Management:** Add, view, and categorize income and expense transactions with smart category auto-selection
 *   **Advanced Filtering:** Filter transactions by date range, month, and year with intuitive modal filters
-*   **Category Management:** Create, edit, and delete custom categories with emoji icons for easy identification
+*   **Category Management:** Create, edit, and delete custom categories with flexible optional descriptions
+*   **Transaction Details View:** Dedicated modal for viewing complete transaction information with formatted details
 *   **Interactive Charts:** Visualize financial data with yearly and monthly income/expense line charts, and category-wise spending bar charts
 *   **Real-time Analytics:** Track total income, expenses, monthly savings, and overall balance with color-coded metrics
 
@@ -16,6 +17,8 @@ A modern, responsive, and progressive web application (PWA) for tracking persona
 *   **Responsive Layout:** Adaptive design that works seamlessly across desktop, tablet, and mobile devices
 *   **Touch Optimized:** Enhanced touch interactions with proper gesture handling and visual feedback
 *   **Floating Action Button:** Quick access to add transactions with smart positioning above bottom navigation
+*   **Smart Accordions:** Mobile transaction view with collapsible accordions showing category, amount preview, and transaction notes (first 30 characters)
+*   **Pagination Support:** Handle large transaction lists efficiently with customizable rows per page (20, 50, 100, 200)
 
 ### ✨ **Beautiful Loading System**
 *   **6 Loader Variants:** Spinner, dots, pulse, skeleton, overlay, and inline loaders for different contexts
@@ -40,6 +43,13 @@ A modern, responsive, and progressive web application (PWA) for tracking persona
 *   **Installable:** Can be installed on devices like a native app
 *   **Performance Optimized:** Fast loading with efficient caching strategies
 *   **Modern Web Standards:** Uses latest web technologies for optimal performance
+
+### 🎨 **Modern UI/UX Design**
+*   **Glassmorphism Effects:** Beautiful frosted glass effect throughout the app with backdrop blur and transparency
+*   **iOS-Style Components:** Modern button designs with gradient backgrounds and smooth hover/active states
+*   **Enhanced Notifications:** Snackbar/toast notifications with strong blur effects (30px) and semi-transparent backgrounds (95% opacity) for excellent mobile readability
+*   **Color-Coded Feedback:** Success (green), error (red), warning (orange), and info (blue) notifications with distinct visual styling
+*   **Smooth Animations:** GPU-accelerated transitions with cubic-bezier easing for native-like feel
 
 ## Technologies Used
 
@@ -259,6 +269,8 @@ To create custom loader animations:
 *   **Bottom Navigation Not Showing:** Ensure you're viewing on mobile breakpoint (< 600px width)
 *   **FAB Button Not Working:** Check if categories are loaded, try clearing localStorage
 *   **Touch Events Not Working:** Ensure proper touch-action CSS properties are applied
+*   **Accordion Not Expanding:** Check browser console for errors, verify transaction data is properly loaded
+*   **Notes Preview Not Showing:** Ensure transactions have notes field populated, verify accordion is in collapsed state
 
 ### **🧹 Clean Installation**
 ```bash
@@ -276,7 +288,30 @@ npm run dev
 
 ## Recent Updates & Changelog
 
-### **Version 2.0.1** - Latest Features ✨
+### **Version 2.0.2** - Latest Release ✨
+
+**📱 Enhanced Mobile Experience:**
+- **Improved Transaction Accordions:** Redesigned mobile transaction view with better layout grouping category on left and amount+arrow on right
+- **Transaction Notes Preview:** Show first 30 characters of notes in collapsed accordion state, automatically hidden when expanded
+- **Smart Spacing:** Optimized padding and spacing for better touch targets on mobile devices
+
+**🎨 Glassmorphism UI Enhancements:**
+- **Enhanced Snackbars:** Toast notifications now feature strong blur effects (30px backdrop filter) with 95% opacity backgrounds
+- **Cross-Browser Support:** Added `-webkit-backdrop-filter` for Safari/iOS compatibility
+- **Color-Coded Alerts:** Distinct backgrounds for success (green), error (red), warning (orange), and info (blue) states
+- **Improved Readability:** Stronger shadows and borders ensure notifications are clearly visible on mobile devices over any background
+
+**🔧 UX Improvements:**
+- **Auto-Closing Modals:** Category add/edit modals now automatically close after successful operations
+- **Optional Fields:** Category description is now optional, requiring only the category name
+- **Better Visual Feedback:** Enhanced confirmation messages and error handling
+
+**💡 Developer Experience:**
+- **Refined TypeScript Types:** Improved type safety with optional description field in Category interface
+- **Consistent UI Patterns:** Standardized modal behaviors across all CRUD operations
+- **Better State Management:** Improved accordion expansion state tracking for smoother interactions
+
+### **Version 2.0.1** - Previous Release
 
 **🚀 Mobile-First Design Overhaul:**
 - **Bottom Navigation:** Implemented thumb-friendly bottom navigation for mobile devices
@@ -305,5 +340,10 @@ npm run dev
 - Advanced analytics and budgeting features
 - Recurring transaction automation
 - Enhanced search and filtering capabilities
+- Dark mode support with theme switching
+- Budget tracking and spending alerts
+- Receipt attachments and image uploads
+- CSV export functionality
+- Advanced reporting with PDF generation
 
 
